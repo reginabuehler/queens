@@ -19,7 +19,6 @@ import logging
 import numpy as np
 import pytest
 
-from queens.drivers.fourc import Fourc
 from queens.iterators.monte_carlo import MonteCarlo
 from queens.main import run_iterator
 from queens.models.simulation import Simulation
@@ -28,6 +27,7 @@ from queens.parameters.random_fields.karhunen_loeve import KarhunenLoeve
 from queens.schedulers.local import Local
 from queens.utils.config_directories import experiment_directory
 from queens.utils.io import load_result, read_file
+from queens_interfaces.fourc.driver import Fourc
 from queens_interfaces.fourc.random_material_preprocessor import (
     create_random_elemenentwise_material_field,
     extract_by_material_id,
