@@ -19,14 +19,14 @@ import time
 from datetime import timedelta
 
 from dask.distributed import Client
-
-from queens.schedulers._dask import Dask
-from queens.schedulers.cluster import VALID_WORKLOAD_MANAGERS, timedelta_to_str
 from queens.utils.config_directories import experiment_directory  # Do not change this import!
 from queens.utils.logger_settings import log_init_args
 from queens.utils.remote_operations import get_port
 from queens.utils.rsync import rsync
 from queens.utils.valid_options import get_option
+
+from queens.schedulers._dask import Dask
+from queens.schedulers.cluster import VALID_WORKLOAD_MANAGERS, timedelta_to_str
 
 _logger = logging.getLogger(__name__)
 
