@@ -45,6 +45,8 @@ class SobolIndex(Iterator):
         num_bootstrap_samples (int): Number of bootstrap samples for confidence intervals.
         confidence_level (float): Confidence level for the intervals.
         result_description (dict): Description of the desired results.
+        samples_unit_hypercube (bool):  Whether Saltelli's sequence is sampled uniformly from
+                                        the unit hypercube.
         samples (np.array): Samples used for analysis.
         output (dict): Model outputs corresponding to samples.
         salib_problem (dict): Problem definition for SALib.
