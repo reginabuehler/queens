@@ -222,9 +222,7 @@ class Parameters:
         for i, parameter in enumerate(self.to_list()):
             if parameter.dimension != 1:
                 raise ValueError("Only 1D Random variables can be transformed!")
-            transformed_samples[:, i] = (parameter.ppf(samples[:, i])).reshape(-1)
-            # guarantee correct shape
-            # could also be done in ppf method in distributions.particle.py
+            transformed_samples[:, i] = parameter.ppf(samples[:, i])
         return transformed_samples
 
     def sample_as_dict(self, sample):
