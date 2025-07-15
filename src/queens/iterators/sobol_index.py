@@ -66,7 +66,7 @@ class SobolIndex(Iterator):
         confidence_level,
         result_description,
         skip_values=None,
-        samples_unit_hypercube=None,
+        samples_unit_hypercube=False,
     ):
         """Initialize Saltelli SALib iterator object.
 
