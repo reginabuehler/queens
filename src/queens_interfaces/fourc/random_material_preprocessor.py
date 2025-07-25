@@ -16,7 +16,14 @@
 from pathlib import Path
 
 import numpy as np
-from fourcipp.fourc_input import FourCInput
+
+try:
+    from fourcipp.fourc_input import FourCInput
+except ImportError as exc:
+    raise ImportError(
+        "The required packages to construct random fields in QUEENS for 4C are not installed."
+        " Please install them via \n pip install -e .[fourc]"
+    ) from exc
 
 
 def get_node_coordinates(fourc_input, node_ids):

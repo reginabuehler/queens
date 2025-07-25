@@ -62,7 +62,7 @@ def test_write_random_elementwise_material(
         fourc_input_template,
         "STRUCTURE ELEMENTS",
         extract_by_material_id(10),
-        "mue",
+        "MUE",
         material_file_template,
     )
 
@@ -74,7 +74,7 @@ def test_write_random_elementwise_material(
         explained_variance=0.95,
         coords=mue_rf_parameters,
     )
-    parameters = Parameters(mue=mue)
+    parameters = Parameters(MUE=mue)
 
     # Setup iterator
     data_processor = None
