@@ -21,10 +21,3 @@ from queens.data_processors.csv_file import CsvFile
 from queens.data_processors.numpy_file import NumpyFile
 from queens.data_processors.pvd_file import PvdFile
 from queens.data_processors.txt_file import TxtFile
-
-VALID_TYPES = {
-    "csv": CsvFile,
-    "numpy": NumpyFile,
-    "pvd": PvdFile,
-    "txt": TxtFile,
-}

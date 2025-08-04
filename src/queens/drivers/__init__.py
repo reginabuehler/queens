@@ -21,9 +21,3 @@ Modules for calling external simulation software.
 from queens.drivers.function import Function
 from queens.drivers.jobscript import Jobscript
 from queens.drivers.mpi import Mpi
-
-VALID_TYPES = {
-    "mpi": Mpi,
-    "jobscript": Jobscript,
-    "function": Function,
-}
