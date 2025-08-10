@@ -12,23 +12,8 @@
 # should have received a copy of the GNU Lesser General Public License along with QUEENS. If not,
 # see <https://www.gnu.org/licenses/>.
 #
-"""Schedulers.
+"""Modules interfacing 4C.
 
-Modules for scheduling and submitting computational jobs.
+Modules for interfacing the for multiphysics code 4C (
+https://github.com/4C-multiphysics/4C)
 """
-from typing import TYPE_CHECKING
-
-from queens.utils.imports import extract_type_checking_imports, import_class_from_class_module_map
-
-if TYPE_CHECKING:
-    from queens.schedulers._scheduler import Scheduler
-    from queens.schedulers.cluster import Cluster
-    from queens.schedulers.local import Local
-    from queens.schedulers.pool import Pool
-
-
-class_module_map = extract_type_checking_imports(__file__)
-
-
-def __getattr__(name):
-    return import_class_from_class_module_map(name, class_module_map, __name__)
