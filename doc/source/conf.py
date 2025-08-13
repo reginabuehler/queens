@@ -153,8 +153,8 @@ html_theme = "pydata_sphinx_theme"
 #
 html_theme_options = {
     "logo": {
-        "image_light": "images/queens_logo_day.svg",
-        "image_dark": "images/queens_logo_night.svg",
+        "image_light": "images/queens_logo_no_text.svg",
+        "image_dark": "images/queens_logo_no_text.svg",
     },
     "icon_links": [
         {
