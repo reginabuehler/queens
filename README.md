@@ -8,6 +8,8 @@
 
 </div>
 
+<br>
+
 <div align="center">
 
 [![precommit](./doc/source/images/precommit_badge.svg)](https://github.com/pre-commit/pre-commit)
