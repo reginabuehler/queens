@@ -390,7 +390,7 @@ texinfo_documents = [
 nbsphinx_execute = "always"  # or 'auto' or 'never'
 
 # Optional: suppress warnings about missing kernels
-nbsphinx_allow_errors = True
+nbsphinx_allow_errors = False
 
 # Include custom JS to collapse output of notebooks
 html_js_files = ["collapse_output.js"]

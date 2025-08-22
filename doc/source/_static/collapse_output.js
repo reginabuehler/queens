@@ -23,35 +23,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-
-// document.addEventListener("DOMContentLoaded", function () {
-//     const outputs = document.querySelectorAll('.nboutput.docutils.container');
-//     let prev = null;
-
-//     outputs.forEach(output => {
-//         if (
-//             prev &&
-//             prev.nextElementSibling === output &&
-//             prev.querySelector('.output_area') &&
-//             output.querySelector('.output_area')
-//         ) {
-//             // Move the entire .output_area block from output to prev
-//             const content = output.querySelector('.output_area');
-//             if (content) {
-//                 const clone = content.cloneNode(true);
-//                 // Insert a vertical spacer to enforce block stacking
-//                 const spacer = document.createElement('div');
-//                 spacer.style.height = '0.5em';
-//                 prev.appendChild(spacer);
-//                 prev.appendChild(clone);
-//                 output.remove();
-//             }
-//         } else {
-//             prev = output;
-//         }
-//     });
-// });
-
 document.addEventListener("DOMContentLoaded", () => {
     // Function to create and append a toggle button to a div
     const addToggleButton = (div) => {

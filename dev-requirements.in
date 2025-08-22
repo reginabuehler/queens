@@ -21,3 +21,4 @@ yamllint>=1.19.0
 ruff
 myst-parser
 testbook
+ipykernel

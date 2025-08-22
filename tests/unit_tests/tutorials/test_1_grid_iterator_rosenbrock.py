@@ -14,8 +14,8 @@
 #
 """Unit tests for 1-grid-iterator-rosenbrock tutorial."""
 
-from testbook import testbook
 import numpy as np
+from testbook import testbook
 
 
 # tested jupyter notebooks should be mentioned below
@@ -25,7 +25,8 @@ import numpy as np
 def test_result_output(tb, tmp_path):
     """Parameterized test case for Jupyter notebook output.
 
-    The notebook is run and it is checked that the output of a specific cell matches given input.
+    The notebook is run and it is checked that the output of a specific
+    cell matches given input.
     """
     expected_results = np.array(
         [
@@ -55,7 +56,7 @@ def test_result_output(tb, tmp_path):
             [1.000e02],
             [4.010e02],
         ]
-    )
+    ).tolist()
 
     tb.inject(f"output_dir = '{tmp_path}'")
     tb.inject("experiment_name = 'grid_iterator_rosenbrock'")
@@ -64,6 +65,5 @@ def test_result_output(tb, tmp_path):
 
     tb.execute_cell([0, 2, 6, 8, 10, 12])
     tb.inject("import numpy as np")
-    tb.inject(
-        f" np.testing.assert_allclose(np.array(results['raw_output_data']['result']), {expected_results.tolist()})"
-    )
+    tb.inject("current_results = np.array(results['raw_output_data']['result'])")
+    tb.inject(f" np.testing.assert_allclose(current_results, {expected_results})")

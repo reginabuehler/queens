@@ -31,7 +31,6 @@ def test_notebooks(notebook_path):
     The notebook is run and it is checked that it runs through without
     any errors/assertions.
     """
-
     with testbook(notebook_path) as tb:
         # execute the notebook
         tb.execute()
