@@ -22,7 +22,6 @@ import plotly.graph_objs as go
 from SALib.analyze import sobol
 from SALib.sample import saltelli
 
-from queens.distributions import lognormal, normal, uniform
 from queens.iterators._iterator import Iterator
 from queens.utils.logger_settings import log_init_args
 from queens.utils.process_outputs import write_results
@@ -322,39 +321,3 @@ class SobolIndex(Iterator):
 
             fig = go.Figure(data=data, layout=layout)
             fig.write_html(chart_path)
-
-
-def extract_parameters_of_parameter_distributions(parameters):
-    """Extract the parameters of the parameter distributions.
-
-    Args:
-        parameters (Parameters): QUEENS Parameters object containing the metadata
-    Returns:
-        distribution_types (list): list with distribution types of the parameter distributions
-        distribution_parameters (list): list with parameters of the parameter distributions
-    """
-    distribution_types = []
-    distribution_parameters = []
-    for parameter in parameters.dict.values():
-        if isinstance(parameter, uniform.Uniform):
-            upper_bound = parameter.upper_bound
-            lower_bound = parameter.lower_bound
-            distribution_name = "unif"
-        # in queens normal distributions are parameterized with mean and var
-        # in salib normal distributions are parameterized via mean and std
-        # -> we need to reparameterize normal distributions
-        elif isinstance(parameter, normal.Normal):
-            lower_bound = parameter.mean.squeeze()
-            upper_bound = np.sqrt(parameter.covariance.squeeze())
-            distribution_name = "norm"
-        elif isinstance(parameter, lognormal.LogNormal):
-            lower_bound = parameter.mu.squeeze()
-            upper_bound = parameter.sigma.squeeze()
-            distribution_name = "lognorm"
-        else:
-            raise ValueError("Valid distributions are normal, lognormal and uniform!")
-
-        distribution_types.append(distribution_name)
-        distribution_parameters.append([lower_bound, upper_bound])
-
-    return distribution_types, distribution_parameters
