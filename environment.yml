@@ -17,7 +17,7 @@ dependencies:
   - scikit-learn==1.5.2
   - scipy==1.14.1
   - libopenblas==0.3.28
-# required for jupyter notebook testing
+# required for jupyter notebook integration into the sphinx documentation
   - pandoc
 # Only install pip-tools via pip itself since
 # all other pip dependencies should be managed
