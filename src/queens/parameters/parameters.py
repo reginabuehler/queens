@@ -18,7 +18,7 @@ import logging
 
 import numpy as np
 
-from queens.distributions._distribution import Distribution
+from queens.distributions._distribution import Continuous, Discrete
 from queens.parameters.random_fields._random_field import RandomField
 from queens.utils.logger_settings import log_init_args
 
