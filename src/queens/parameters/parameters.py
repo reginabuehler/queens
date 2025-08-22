@@ -71,7 +71,7 @@ class Parameters:
         random_field_flag = False
 
         for parameter_name, parameter_obj in parameters.items():
-            if isinstance(parameter_obj, Distribution):
+            if isinstance(parameter_obj, (Continuous, Discrete)):
                 joint_parameters_keys = _add_parameters_keys(
                     joint_parameters_keys, parameter_name, parameter_obj.dimension
                 )
