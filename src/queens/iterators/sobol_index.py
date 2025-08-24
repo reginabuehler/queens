@@ -109,6 +109,8 @@ class SobolIndex(Iterator):
                 "The SaltelliIterator does not work in conjunction with random fields."
             )
 
+        # Let SALib sample uniformly from the unit hypercube.
+        # We handle transforming the distribution to avoid translating to SALib’s nomenclature.
         distribution_types = ["unif"] * self.num_params
         distribution_parameters = [[0, 1]] * self.num_params
 
@@ -127,7 +129,7 @@ class SobolIndex(Iterator):
             skip_values=self.skip_values,
         )
 
-        # Transform samples back to original distribution
+        # Transform samples to correct distribution.
         self.samples = self.parameters.inverse_cdf_transform(self.samples)
         _logger.debug(self.samples)
 
