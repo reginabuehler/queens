@@ -42,11 +42,11 @@ def fixture_default_sobol_index_iterator(
     return my_iterator
 
 
-@pytest.fixture(name="sobol_index_iterator_mixed")
-def fixture_mixed_sobol_index_iterator(
+@pytest.fixture(name="default_sobol_index_iterator_mixed")
+def fixture_default_sobol_index_iterator_mixed(
     global_settings, default_simulation_model, default_parameters_mixed
 ):
-    """Sobol index iterator with different distributions."""
+    """Default sobol index iterator with different distributions."""
     default_simulation_model.driver.parameters = default_parameters_mixed
 
     my_iterator = SobolIndex(
@@ -91,9 +91,9 @@ def fixture_mixed_sobol_index_iterator(
                 ]
             ),
         ),
-        # Test case for fixture_mixed_sobol_index_iterator with mixed distributions
+        # Test case for fixture_default_sobol_index_iterator_mixed with mixed distributions
         (
-            "sobol_index_iterator_mixed",
+            "default_sobol_index_iterator_mixed",
             np.array(
                 [
                     [-3.1323887688626857, -0.6295573938365613, 1.183719794407078],
