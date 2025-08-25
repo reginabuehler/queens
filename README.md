@@ -131,7 +131,7 @@ If you use QUEENS in your work, please cite the relevant method papers and
 ```bib
 @misc{queens,
       title={QUEENS: An Open-Source Python Framework for Solver-Independent Analyses of Large-Scale Computational Models},
-      author={Jonas Biehler\textsuperscript{*} and Jonas Nitzler\textsuperscript{*} and Sebastian Brandstaeter\textsuperscript{*} and Maximilian Dinkel and Volker Gravemeier and Lea J. Häusel and Gil Robalo Rei and Harald Willmann and Barbara Wirthl and Wolfgang A. Wall},
+      author={Jonas Biehler\textsuperscript{*} and Jonas Nitzler\textsuperscript{*} and Sebastian Brandstaeter\textsuperscript{*} and Maximilian Dinkel and Volker Gravemeier and Lea J. Haeusel and Gil Robalo Rei and Harald Willmann and Barbara Wirthl and Wolfgang A. Wall},
       year={2025},
       eprint={2508.16316},
       archivePrefix={arXiv},
