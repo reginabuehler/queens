@@ -122,10 +122,13 @@ if __name__ == "__main__":
 
 ## :busts_in_silhouette: Contributing
 
-Your contributions are welcome! Please follow our [contributing guidelines](https://github.com/queens-py/queens/blob/main/CONTRIBUTING.md) and [code of conduct](https://github.com/queens-py/queens/blob/main/CODE_OF_CONDUCT.md).
+QUEENS is powered by a [community of contributors](https://www.queens-py.org/community/).
+
+Join us—your contributions are welcome! Please follow our [contributing guidelines](https://github.com/queens-py/queens/blob/main/CONTRIBUTING.md) and [code of conduct](https://github.com/queens-py/queens/blob/main/CODE_OF_CONDUCT.md).
 
 ## :page_with_curl: How to cite
-If you use QUEENS in your work, please cite the relevant method papers and
+
+If you use QUEENS in your work, please cite the relevant method papers and the following article
 
 <!---citation marker, do not remove this comment-->
 ```bib
