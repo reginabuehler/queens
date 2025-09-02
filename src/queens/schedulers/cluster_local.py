@@ -19,54 +19,24 @@ import time
 from datetime import timedelta
 
 from dask.distributed import Client
-from dask_jobqueue import PBSCluster, SLURMCluster
-
-from queens.schedulers._dask import Dask
 from queens.utils.config_directories import experiment_directory  # Do not change this import!
 from queens.utils.logger_settings import log_init_args
+from queens.utils.remote_operations import get_port
+from queens.utils.rsync import rsync
 from queens.utils.valid_options import get_option
+
+from queens.schedulers._dask import Dask
+from queens.schedulers.cluster import VALID_WORKLOAD_MANAGERS, timedelta_to_str
 
 _logger = logging.getLogger(__name__)
 
-VALID_WORKLOAD_MANAGERS = {
-    "slurm": {
-        "dask_cluster_cls": SLURMCluster,
-        "job_extra_directives": lambda nodes, cores: f"--nodes={nodes} --ntasks-per-node={cores} --partition='cascadelake'",
-        "job_directives_skip": [
-            "#SBATCH -n 1",
-            "#SBATCH --mem=",
-            "#SBATCH --cpus-per-task=",
-        ],
-    },
-    "pbs": {
-        "dask_cluster_cls": PBSCluster,
-        "job_extra_directives": lambda nodes, cores: f"-l nodes={nodes}:ppn={cores}",
-        "job_directives_skip": ["#PBS -l select"],
-    },
-}
 
+class ClusterLocal(Dask):
+    """Cluster (local) scheduler for QUEENS.
 
-def timedelta_to_str(timedelta_obj):
-    """Format a timedelta object to str.
-
-    This function seems unnecessarily complicated, but unfortunately the datetime library does not
-     support this formatting for timedeltas. Returns the format HH:MM:SS.
-
-    Args:
-        timedelta_obj (datetime.timedelta): Timedelta object to format
-
-    Returns:
-        str: String of the timedelta object
+    Can be used to schedule jobs to a cluster scheduler with local
+    access i.e. without a network connection.
     """
-    # Time in seconds
-    time_in_seconds = int(timedelta_obj.total_seconds())
-    (minutes, seconds) = divmod(time_in_seconds, 60)
-    (hours, minutes) = divmod(minutes, 60)
-    return f"{hours:02}:{minutes:02}:{seconds:02}"
-
-
-class Cluster(Dask):
-    """Cluster scheduler for QUEENS."""
 
     @log_init_args
     def __init__(
@@ -74,7 +44,6 @@ class Cluster(Dask):
         experiment_name,
         workload_manager,
         walltime,
-        remote_connection,
         num_jobs=1,
         min_jobs=0,
         num_procs=1,
@@ -93,7 +62,6 @@ class Cluster(Dask):
             experiment_name (str): name of the current experiment
             workload_manager (str): Workload manager ("pbs" or "slurm")
             walltime (str): Walltime for each worker job. Format (hh:mm:ss)
-            remote_connection (RemoteConnection): ssh connection to the remote host
             num_jobs (int, opt): Maximum number of parallel jobs
             min_jobs (int, opt): Minimum number of active workers for the cluster
             num_procs (int, opt): Number of processors per job per node
@@ -105,18 +73,9 @@ class Cluster(Dask):
             allowed_failures (int): Number of allowed failures for a task before an error is raised
             verbose (bool, opt): Verbosity of evaluations. Defaults to True.
         """
-        self.remote_connection = remote_connection
-        self.remote_connection.open()
-
-        # sync remote source code with local state
-        self.remote_connection.sync_remote_repository()
-
-        # get the path of the experiment directory on remote host
-        experiment_dir = self.remote_connection.run_function(experiment_directory, experiment_name)
+        experiment_dir = experiment_directory(experiment_name=experiment_name)
         _logger.debug(
-            "experiment directory on %s@%s: %s",
-            self.remote_connection.user,
-            self.remote_connection.host,
+            "experiment directory: %s",
             experiment_dir,
         )
 
@@ -136,8 +95,9 @@ class Cluster(Dask):
         # dask worker lifetime = walltime - 3m +/- 2m
         worker_lifetime = str(int((walltime_delta + timedelta(minutes=2)).total_seconds())) + "s"
 
-        local_port, remote_port = self.remote_connection.open_port_forwarding()
-        local_port_dashboard, remote_port_dashboard = self.remote_connection.open_port_forwarding()
+        remote_port = get_port()
+        local_port_dashboard = get_port()
+        remote_port_dashboard = get_port()
 
         scheduler_options = {
             "port": remote_port,
@@ -168,26 +128,39 @@ class Cluster(Dask):
             "maximum_jobs": num_jobs,
         }
 
-        # actually start the dask cluster on remote host
-        stdout, stderr = self.remote_connection.start_cluster(
-            workload_manager,
-            dask_cluster_kwargs,
-            dask_cluster_adapt_kwargs,
-            experiment_dir,
-        )
-        _logger.debug(stdout)
-        _logger.debug(stderr)
+        dask_cluster_options = get_option(VALID_WORKLOAD_MANAGERS, workload_manager)
+        dask_cluster_cls = dask_cluster_options["dask_cluster_cls"]
+
+        try:
+            _logger.info("Starting dask cluster of type: %s", dask_cluster_cls)
+            _logger.debug("Dask cluster kwargs:")
+            _logger.debug(dask_cluster_kwargs)
+            cluster = dask_cluster_cls(**dask_cluster_kwargs)
+
+            _logger.info("Adapting dask cluster settings")
+            _logger.debug("Dask cluster adapt kwargs:")
+            _logger.debug(dask_cluster_adapt_kwargs)
+            cluster.adapt(**dask_cluster_adapt_kwargs)
+
+            _logger.info("Dask cluster info:")
+            _logger.info(cluster)
+
+            dask_jobscript = experiment_dir / "dask_jobscript.sh"
+            _logger.info("Writing dask jobscript to:")
+            _logger.info(dask_jobscript)
+            dask_jobscript.write_text(str(cluster.job_script()))
+        except Exception as e:
+            raise RuntimeError() from e
 
         for i in range(20, 0, -1):  # 20 tries to connect
             _logger.debug("Trying to connect to Dask Cluster: try #%d", i)
             try:
-                client = Client(address=f"localhost:{local_port}", timeout=10)
+                # client = Client(address=f"localhost:{local_port}", timeout=10)
+                client = Client(cluster)
                 break
             except OSError as exc:
                 if i == 1:
-                    raise OSError(
-                        stdout.read().decode("ascii") + stderr.read().decode("ascii")
-                    ) from exc
+                    raise OSError() from exc
                 time.sleep(1)
 
         _logger.debug("Submitting dummy job to check basic functionality of client.")
@@ -199,7 +172,6 @@ class Cluster(Dask):
             local_port_dashboard,
         )
 
-        # pylint: disable=duplicate-code
         super().__init__(
             experiment_name=experiment_name,
             experiment_dir=experiment_dir,
@@ -209,7 +181,17 @@ class Cluster(Dask):
             restart_workers=restart_workers,
             verbose=verbose,
         )
-        # pylint: enable=duplicate-code
+
+    def restart_worker(self, worker):
+        """Restart a worker.
+
+        This method retires a dask worker. The Client.adapt method of dask takes cares of submitting
+        new workers subsequently.
+
+        Args:
+            worker (str, tuple): Worker to restart. This can be a worker address, name, or a both.
+        """
+        self.client.retire_workers(workers=list(worker))
 
     def copy_files_to_experiment_dir(self, paths):
         """Copy file to experiment directory.
@@ -219,4 +201,4 @@ class Cluster(Dask):
                                 directory
         """
         destination = f"{self.experiment_dir}/"
-        self.remote_connection.copy_to_remote(paths, destination)
+        rsync(paths, destination)
