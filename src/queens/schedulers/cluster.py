@@ -84,6 +84,7 @@ class Cluster(Dask):
         restart_workers=False,
         allowed_failures=5,
         verbose=True,
+        experiment_base_dir=None,
     ):
         """Init method for the cluster scheduler.
 
@@ -104,6 +105,7 @@ class Cluster(Dask):
                                     jobs (>1min) this should be set to true in most cases.
             allowed_failures (int): Number of allowed failures for a task before an error is raised
             verbose (bool, opt): Verbosity of evaluations. Defaults to True.
+            experiment_base_dir (str, Path): Base directory for the simulation outputs
         """
         self.remote_connection = remote_connection
         self.remote_connection.open()
@@ -112,7 +114,10 @@ class Cluster(Dask):
         self.remote_connection.sync_remote_repository()
 
         # get the path of the experiment directory on remote host
-        experiment_dir = self.remote_connection.run_function(experiment_directory, experiment_name)
+        experiment_dir = self.remote_connection.run_function(
+            experiment_directory, experiment_name, experiment_base_dir
+        )
+
         _logger.debug(
             "experiment directory on %s@%s: %s",
             self.remote_connection.user,

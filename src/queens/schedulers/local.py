@@ -30,7 +30,13 @@ class Local(Dask):
 
     @log_init_args
     def __init__(
-        self, experiment_name, num_jobs=1, num_procs=1, restart_workers=False, verbose=True
+        self,
+        experiment_name,
+        num_jobs=1,
+        num_procs=1,
+        restart_workers=False,
+        verbose=True,
+        experiment_base_dir=None,
     ):
         """Initialize local scheduler.
 
@@ -41,8 +47,11 @@ class Local(Dask):
             restart_workers (bool): If true, restart workers after each finished job. Try setting it
                                     to true in case you are experiencing memory-leakage warnings.
             verbose (bool, opt): Verbosity of evaluations. Defaults to True.
+            experiment_base_dir (str, Path): Base directory for the simulation outputs
         """
-        experiment_dir = experiment_directory(experiment_name=experiment_name)
+        experiment_dir = experiment_directory(
+            experiment_name=experiment_name, experiment_base_directory=experiment_base_dir
+        )
 
         cluster = LocalCluster(
             n_workers=num_jobs,
