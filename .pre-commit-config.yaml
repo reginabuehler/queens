@@ -77,7 +77,6 @@ repos:
         additional_dependencies: ["toml"]
         always_run: false
         pass_filenames: true
-repos:
   - repo: https://github.com/kynan/nbstripout
     rev: 0.8.1
     hooks:
