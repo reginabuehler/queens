@@ -53,25 +53,34 @@ class Local(Dask):
             experiment_name=experiment_name, experiment_base_directory=experiment_base_dir
         )
 
-        cluster = LocalCluster(
-            n_workers=num_jobs,
-            processes=True,
-            threads_per_worker=num_procs,
-            silence_logs=False,
-        )
-        client = Client(cluster)
-        _logger.info(
-            "To view the Dask dashboard open this link in your browser: %s", client.dashboard_link
-        )
         super().__init__(
             experiment_name=experiment_name,
             experiment_dir=experiment_dir,
             num_jobs=num_jobs,
             num_procs=num_procs,
-            client=client,
             restart_workers=restart_workers,
             verbose=verbose,
         )
+
+    def _start_cluster_and_connect_client(self):
+        """Start a Dask cluster and a client that connects to it.
+
+        Returns:
+               client (Client): Dask client that is connected to and submits computations to a
+                                Dask cluster.
+        """
+        cluster = LocalCluster(
+            n_workers=self.num_jobs,
+            processes=True,
+            threads_per_worker=self.num_procs,
+            silence_logs=False,
+        )
+        client = Client(cluster)
+        _logger.info(
+            "To view the Dask dashboard open this link in your browser: %s",
+            client.dashboard_link,
+        )
+        return client
 
     def restart_worker(self, worker):
         """Restart a worker.
