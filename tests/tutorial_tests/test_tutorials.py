@@ -17,12 +17,15 @@
 import pytest
 from testbook import testbook
 
+from test_utils.tutorial_tests import inject_mock_path
+
 
 # tested jupyter notebooks should be added to the list below
 @pytest.mark.parametrize(
     "notebook_path",
     [
-        "tutorials/2-grid-iterator-rosenbrock.ipynb",
+        "tutorials/1-grid-iterator-rosenbrock.ipynb",
+        "tutorials/2-uncertainty-propagation-and-quantification.ipynb",
     ],
 )
 def test_notebooks(tmp_path, notebook_path):
@@ -31,19 +34,13 @@ def test_notebooks(tmp_path, notebook_path):
     The notebook is run and it is checked that it runs through without
     any errors/assertions.
     """
-    with testbook(notebook_path) as tb:
+    with testbook(notebook_path, timeout=-1) as tb:
         # Patch base_directory to avoid writing test data to user's home dir.
         # Note that tb.patch converts the mocked Path to a string, so we have to use tb.inject.
-        tb.inject(
-            f"""
-            from unittest.mock import MagicMock
-            from pathlib import Path
-            import queens.utils.config_directories
-            mock_base_dir = Path('{tmp_path}')
-            queens.utils.config_directories.base_directory = MagicMock(return_value=mock_base_dir)
-            """,
-            before=0,
-        )
+        inject_mock_path(tb, tmp_path)
 
         # execute the notebook
+        tb.inject("from queens.utils import config_directories")
+        tb.inject(f"config_directories = '{tmp_path}'")
+        tb.inject(f"output_dir = '{tmp_path}'")
         tb.execute()
