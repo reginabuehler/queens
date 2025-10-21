@@ -27,6 +27,7 @@ if TYPE_CHECKING:
     from queens.distributions.exponential import Exponential
     from queens.distributions.free_variable import FreeVariable
     from queens.distributions.lognormal import LogNormal
+    from queens.distributions.loguniform import LogUniform
     from queens.distributions.mean_field_normal import MeanFieldNormal
     from queens.distributions.multinomial import Multinomial
     from queens.distributions.normal import Normal
