@@ -49,8 +49,12 @@ jobs:
           black --check src/* tests
           echo "::endgroup::"
 
-          echo "::group::Run pylint..."
-          pylint --rcfile=.pylintrc --disable=duplicate-code src/ tests
+          echo "::group::Run pylint on src..."
+          pylint --rcfile=.pylintrc --ignore=integration_tests src/ tests/
+          echo "::endgroup::"
+
+          echo "::group::Run pylint on integration tests..."
+          pylint --rcfile=.pylintrc --disable=duplicate-code tests/integration_tests/
           echo "::endgroup::"
 
           echo "::group::Run ruff..."
