@@ -268,7 +268,7 @@ class Jobscript(Driver):
 
         input_files = {}
         for input_template_name, input_template_path in self.input_templates.items():
-            input_file_str = input_template_name + input_template_path.suffix
+            input_file_str = input_template_name + "".join(input_template_path.suffixes)
             input_files[input_template_name] = job_dir / input_file_str
 
         return job_dir, output_dir, output_file, input_files, log_file
