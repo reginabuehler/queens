@@ -16,8 +16,6 @@
 
 import logging
 
-import pyfiglet
-
 from queens.utils.printing import DEFAULT_OUTPUT_WIDTH
 
 _logger = logging.getLogger(__name__)
@@ -109,14 +107,27 @@ def print_crown(output_width: int = DEFAULT_OUTPUT_WIDTH) -> None:
         output_width: Terminal output width
     """
     crown = r"""
-        *
-      * | *
-     * \|/ *
-* * * \|O|/ * * *
- \o\o\o|O|o/o/o/
- (<><><>O<><><>)
-  '==========='
-    """
+
+                  .**.
+                  I  I
+                  *  *
+                 :.  .:
+                 I    I
+  :::           .*    *.           :*:
+  I  *          *.    .*          *  I
+ .:   *:*::::   I      I   ::::*:*   :.
+ ::   :I:    ::.*      *.::    :I:   ::
+ :.   * *:    .V.      .V.    :* *   .:
+ :.  I   ::    I*.     *I    ::   I  .*
+ *. ::    .*  :: ::  :* ::  *:    :* .*
+ *. I       * I   :**:   I *       I .*
+ *.:.        I*    **    *I        .:.*
+ *:I        :*.* ::  *: *.*:        I.*
+ *I:       :*  .**    *I.  *:       :**
+ *V       *. .*.  *II*  .*. .*       V*
+ ** ..:*I***I*::::    ::::*I***I*:.. **
+  ......                        ......
+          """
     print_centered_multiline_block(crown, output_width)
 
 
@@ -144,19 +155,27 @@ def print_points_iterator(output_width: int = DEFAULT_OUTPUT_WIDTH) -> None:
     print_centered_multiline_block(points, output_width)
 
 
-def print_banner(message: str = "QUEENS", output_width: int = DEFAULT_OUTPUT_WIDTH) -> None:
+def print_banner(output_width: int = DEFAULT_OUTPUT_WIDTH) -> None:
     """Print banner.
 
     Args:
-        message: Message in banner
         output_width: Terminal output width
     """
-    print_centered_multiline_block(pyfiglet.figlet_format(message, font="banner3-D"), output_width)
+    banner = """
+    :*IV$$$V*:        VV:        *VV    VVVVVVVVVVVF   *VVVVVVVVVVV.  .VF.        :VI     :FV$$$V*:
+  *$$*:.  .:*V$*      $$:        *$V    $$*.........   *$I.........   .$$$*       *$V    V$F.  .:FV.
+ V$*          *$$.    $$:        *$V    $$:            *$F            .$$F$V.     *$V   .$$.
+V$F            *$V    $$:        *$V    $$:            *$I            .$$ .V$*    *$V    F$$*:.
+$$:            :$$    $$:        *$V    $$$VVVVVVVV    *$$VVVVVVVV:   .$$   *$V.  *$V     .*FV$$V*.
+I$F        **  *$V    $$:        *$V    $$:            *$F            .$$    .I$* *$V          .*$$*
+ V$*       :V$F$$.    I$F        V$*    $$:            *$F            .$$      :$$I$V            *$$
+  *$$*:.  .:*$$$F      F$V*....*V$*     $$*.........   *$I.........   .$$        F$$V   V$*:   .:V$*
+    :*IV$$VI*: :I:      .*FVVVVF:       VVVVVVVVVVVV   *VVVVVVVVVVV.  .VV         :VI    :*VV$$VI*.
+    """
+    print_centered_multiline_block(banner, output_width)
 
 
-def print_centered_multiline_block(
-    string: str | pyfiglet.FigletString, output_width: int = DEFAULT_OUTPUT_WIDTH
-) -> None:
+def print_centered_multiline_block(string: str, output_width: int = DEFAULT_OUTPUT_WIDTH) -> None:
     """Print a multiline text in the center as a block.
 
     Args:
@@ -189,11 +208,11 @@ def print_banner_and_description(output_width: int = DEFAULT_OUTPUT_WIDTH) -> No
     Args:
         output_width: Terminal output width
     """
-    print_crown()
-    print_banner()
+    print_crown(output_width)
+    print_banner(output_width)
     description = """
-    A general purpose framework for Uncertainty Quantification,
-    Physics-Informed Machine Learning, Bayesian Optimization,
-    Inverse Problems and Simulation Analytics
+    QUEENS (Quantification of Uncertain Effects in ENgineering Systems):
+    a Python framework for solver-independent multi-query
+    analyses of large-scale computational models.
     """
     print_centered_multiline(description, output_width)
