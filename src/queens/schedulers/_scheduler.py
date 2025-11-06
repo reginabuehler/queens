@@ -18,6 +18,9 @@ import abc
 import logging
 import select
 import sys
+from collections.abc import Iterable
+from pathlib import Path
+from typing import Protocol
 
 import numpy as np
 
@@ -25,6 +28,31 @@ from queens.utils.config_directories import create_directory, experiment_directo
 from queens.utils.rsync import rsync
 
 _logger = logging.getLogger(__name__)
+
+
+class SchedulerCallableSignature(Protocol):
+    """Signature for callables which can be used with QUEENS schedulers."""
+
+    def __call__(
+        self,
+        sample: np.ndarray,
+        job_id: int,
+        num_procs: int,
+        experiment_dir: Path,
+        experiment_name: str,
+    ) -> tuple[np.ndarray, np.ndarray]:
+        """Signature for callables which can be used with QUEENS schedulers.
+
+        Args:
+            sample (np.array): Input ample.
+            job_id (int): Job ID.
+            num_procs (int): Number of processors.
+            experiment_dir (Path): Path to QUEENS experiment directory.
+            experiment_name (str): Name of QUEENS experiment.
+
+        Returns:
+            Result and potentially the gradient.
+        """
 
 
 class Scheduler(metaclass=abc.ABCMeta):
@@ -54,12 +82,14 @@ class Scheduler(metaclass=abc.ABCMeta):
         self.verbose = verbose
 
     @abc.abstractmethod
-    def evaluate(self, samples, driver, job_ids=None):
+    def evaluate(
+        self, samples: Iterable, function: SchedulerCallableSignature, job_ids: Iterable = None
+    ) -> dict:
         """Submit jobs to driver.
 
         Args:
             samples (np.array): Array of samples
-            driver (Driver): Driver object that runs simulation
+            function (Callable): Callable to evaluate in the scheduler
             job_ids (lst, opt): List of job IDs corresponding to samples
 
         Returns:
