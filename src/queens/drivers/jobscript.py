@@ -16,6 +16,7 @@
 
 
 import logging
+from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -92,8 +93,8 @@ class Jobscript(Driver):
         jobscript_template,
         executable,
         files_to_copy=None,
-        data_processor=None,
-        gradient_data_processor=None,
+        data_processor: Callable = None,
+        gradient_data_processor: Callable = None,
         jobscript_file_name="jobscript.sh",
         extra_options=None,
         raise_error_on_jobscript_failure=True,
@@ -305,12 +306,12 @@ class Jobscript(Driver):
         """
         result = None
         if self.data_processor:
-            result = self.data_processor.get_data_from_file(output_dir)
+            result = self.data_processor(output_dir)
             _logger.debug("Got result: %s", result)
 
         gradient = None
         if self.gradient_data_processor:
-            gradient = self.gradient_data_processor.get_data_from_file(output_dir)
+            gradient = self.gradient_data_processor(output_dir)
             _logger.debug("Got gradient: %s", gradient)
         return result, gradient
 

@@ -49,8 +49,8 @@ class Fourc(Jobscript):
             input_templates (str, Path, dict): path to simulation input template
             executable (str, Path): path to main executable of respective software
             files_to_copy (list, opt): files or directories to copy to experiment_dir
-            data_processor (obj, opt): instance of data processor class
-            gradient_data_processor (obj, opt): instance of data processor class for gradient data
+            data_processor (Callable, opt): data processor
+            gradient_data_processor (Callable, opt): data processor class for gradient data
             post_processor (path, opt): path to post_processor
             post_options (str, opt): options for post-processing
             mpi_cmd (str, opt): mpi command

@@ -17,6 +17,7 @@
 import abc
 import logging
 from pathlib import Path
+from typing import Any
 
 _logger = logging.getLogger(__name__)
 
@@ -90,14 +91,14 @@ class DataProcessor(metaclass=abc.ABCMeta):
         self.file_options_dict = file_options_dict
         self.file_name_identifier = file_name_identifier
 
-    def get_data_from_file(self, base_dir_file):
+    def get_data_from_file(self, base_dir_file: Path) -> Any:
         """Get data of interest from file.
 
         Args:
             base_dir_file (Path): Path of the base directory that contains the file of interest
 
         Returns:
-            processed_data (np.array): Final data from data processor module
+            processed_data (object): Final data from data processor module
         """
         if not base_dir_file:
             raise ValueError(
@@ -119,6 +120,17 @@ class DataProcessor(metaclass=abc.ABCMeta):
 
         self._clean_up(base_dir_file)
         return processed_data
+
+    def __call__(self, base_dir_file: Path) -> Any:
+        """Get data of interest from file.
+
+        Args:
+            base_dir_file (Path): Path of the base directory that contains the file of interest
+
+        Returns:
+            processed_data (object): Final data from data processor module
+        """
+        return self.get_data_from_file(base_dir_file)
 
     def _check_file_exist_and_is_unique(self, base_dir_file):
         """Check if file exists.
