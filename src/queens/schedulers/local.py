@@ -19,7 +19,6 @@ import logging
 from dask.distributed import Client, LocalCluster
 
 from queens.schedulers._dask import Dask
-from queens.utils.config_directories import experiment_directory
 from queens.utils.logger_settings import log_init_args
 
 _logger = logging.getLogger(__name__)
@@ -37,23 +36,25 @@ class Local(Dask):
         restart_workers=False,
         verbose=True,
         experiment_base_dir=None,
+        overwrite_existing_experiment=False,
     ):
         """Initialize local scheduler.
 
         Args:
-            experiment_name (str): name of the current experiment
+            experiment_name (str): Name of the current experiment
             num_jobs (int, opt): Maximum number of parallel jobs
-            num_procs (int, opt): number of processors per job
-            restart_workers (bool): If true, restart workers after each finished job. Try setting it
-                                    to true in case you are experiencing memory-leakage warnings.
+            num_procs (int, opt): Number of processors per job
+            restart_workers (bool): If True, restart workers after each finished job. Try setting it
+                to True in case you are experiencing memory-leakage warnings.
             verbose (bool, opt): Verbosity of evaluations. Defaults to True.
             experiment_base_dir (str, Path): Base directory for the simulation outputs
+            overwrite_existing_experiment (bool): If True, overwrite experiment directory if it
+                exists already. If False, prompt user for confirmation before overwriting.
         """
-        experiment_dir = experiment_directory(
-            experiment_name=experiment_name, experiment_base_directory=experiment_base_dir
-        )
-
         # pylint: disable=duplicate-code
+        experiment_dir = self.local_experiment_dir(
+            experiment_name, experiment_base_dir, overwrite_existing_experiment
+        )
         super().__init__(
             experiment_name=experiment_name,
             experiment_dir=experiment_dir,
@@ -67,8 +68,8 @@ class Local(Dask):
         """Start a Dask cluster and a client that connects to it.
 
         Returns:
-               client (Client): Dask client that is connected to and submits computations to a
-                                Dask cluster.
+            client (Client): Dask client that is connected to and submits computations to a Dask
+                cluster.
         """
         cluster = LocalCluster(
             n_workers=self.num_jobs,
