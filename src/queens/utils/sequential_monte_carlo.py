@@ -18,6 +18,7 @@ import math
 from typing import Any, Callable, Literal
 
 import numpy as np
+from numpy.lib import recfunctions as rfn  # recfunctions is not auto-loaded in numpy.lib
 from particles import smc_samplers as ssp
 from particles.distributions import StructDist
 
@@ -214,7 +215,7 @@ class StaticStateSpaceModel(ssp.StaticModel):
         Returns:
             Numpy array of the particles
         """
-        return np.lib.recfunctions.structured_to_unstructured(theta)  # type: ignore[attr-defined]
+        return rfn.structured_to_unstructured(theta)
 
     def numpy_to_particles_array(self, samples: np.ndarray) -> np.ndarray:
         """Convert numpy arrays to particles objects.
