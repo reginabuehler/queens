@@ -152,7 +152,8 @@ class SobolIndexGPUncertainty(Iterator):
 
     def core_run(self):
         """Core-run."""
-        self.model.build_approximation()
+        if not self.model.is_trained:
+            self.model.build_approximation()
 
         self.calculate_index()
 
