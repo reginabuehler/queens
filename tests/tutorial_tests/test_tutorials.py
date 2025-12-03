@@ -14,6 +14,8 @@
 #
 """Unit tests for jupyter notebook tutorials."""
 
+from pathlib import Path
+
 import pytest
 from testbook import testbook
 
@@ -22,19 +24,16 @@ from test_utils.tutorial_tests import inject_mock_path
 
 # tested jupyter notebooks should be added to the list below
 @pytest.mark.parametrize(
-    "notebook_path",
-    [
-        "tutorials/1-grid-iterator-rosenbrock.ipynb",
-        "tutorials/2-uncertainty-propagation-and-quantification.ipynb",
-    ],
+    "paths_to_tutorial_notebooks",
+    [str(patch) for patch in sorted(Path("tutorials").glob("*.ipynb"))],
 )
-def test_notebooks(tmp_path, notebook_path):
+def test_notebooks(tmp_path, paths_to_tutorial_notebooks):
     """Parameterized test case for multiple Jupyter notebooks.
 
     The notebook is run and it is checked that it runs through without
     any errors/assertions.
     """
-    with testbook(notebook_path, timeout=-1) as tb:
+    with testbook(paths_to_tutorial_notebooks, timeout=-1) as tb:
         # Patch base_directory to avoid writing test data to user's home dir.
         # Note that tb.patch converts the mocked Path to a string, so we have to use tb.inject.
         inject_mock_path(tb, tmp_path)
