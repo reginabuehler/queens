@@ -21,7 +21,7 @@ from test_utils.tutorial_tests import inject_mock_path
 
 
 @testbook(
-    "tutorials/1-grid-iterator-rosenbrock.ipynb",
+    "tutorials/1_grid_iterator_rosenbrock.ipynb",
 )
 def test_output_tutorial_1(tb, tmp_path):
     """Parameterized test case for tutorial 1: Grid Iterator Rosenbrock.
@@ -32,15 +32,18 @@ def test_output_tutorial_1(tb, tmp_path):
     optimal_fun = 2.957935e-11
     optimal_x = np.array([0.99999463, 0.99998915]).tolist()
 
-    inject_mock_path(tb, tmp_path)
-    # tb.execute_cell([2, 4, 6, 8, 13, 15, 17, 19, 21, 23, 25, 27])
-    tb.execute_cell([3, 5, 7, 9, 14, 16, 18, 20, 22, 24, 26, 28])
+    # inject testing cells
     tb.inject(
         """np.testing.assert_allclose(X1, X1_QUEENS)
 np.testing.assert_allclose(X2, X2_QUEENS)
-np.testing.assert_allclose(Z, Z_QUEENS)"""
+np.testing.assert_allclose(Z, Z_QUEENS)""",
+        after=28,
+        run=False,
     )
+    tb.inject(
+        f"np.testing.assert_allclose(optimal_fun, {optimal_fun},atol=1e-12)", after=32, run=False
+    )
+    tb.inject(f"np.testing.assert_allclose(optimal_x, np.array({optimal_x}))", after=33, run=False)
+    inject_mock_path(tb, tmp_path)
 
-    tb.execute_cell([32])
-    tb.inject(f"np.testing.assert_allclose(optimal_fun, {optimal_fun},atol=1e-12)")
-    tb.inject(f"np.testing.assert_allclose(optimal_x, np.array({optimal_x}))")
+    tb.execute()

@@ -25,7 +25,14 @@ from test_utils.tutorial_tests import inject_mock_path
 # tested jupyter notebooks should be added to the list below
 @pytest.mark.parametrize(
     "paths_to_tutorial_notebooks",
-    [str(patch) for patch in sorted(Path("tutorials").glob("*.ipynb"))],
+    [
+        str(patch)
+        for patch in sorted(Path("tutorials").glob("*.ipynb"))
+        if patch.stem
+        not in {
+            t.stem.removeprefix("test_") for t in Path("tests/tutorial_tests").glob("test_*.py")
+        }
+    ],
 )
 def test_notebooks(tmp_path, paths_to_tutorial_notebooks):
     """Parameterized test case for multiple Jupyter notebooks.
@@ -39,7 +46,4 @@ def test_notebooks(tmp_path, paths_to_tutorial_notebooks):
         inject_mock_path(tb, tmp_path)
 
         # execute the notebook
-        tb.inject("from queens.utils import config_directories")
-        tb.inject(f"config_directories = '{tmp_path}'")
-        tb.inject(f"output_dir = '{tmp_path}'")
         tb.execute()

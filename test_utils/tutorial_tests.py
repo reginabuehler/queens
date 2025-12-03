@@ -15,8 +15,8 @@
 """Utility methods used by the unit tests for jupyter notebooks."""
 
 
-def inject_mock_path(tb, tmp_path):
-    """Inject a mock temporary path for testing notebooks.
+def inject_mock_base_dir(tb, tmp_path):
+    """Inject a mock base directory for testing notebooks.
 
     Args:
         tb (testbook): testbook object for inserting code into the notebook
