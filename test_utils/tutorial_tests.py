@@ -12,7 +12,7 @@
 # should have received a copy of the GNU Lesser General Public License along with QUEENS. If not,
 # see <https://www.gnu.org/licenses/>.
 #
-"""Utility methods used by the unit tests for jupyter notebooks."""
+"""Utility methods used by the tutorial tests."""
 
 
 def inject_mock_base_dir(tb, tmp_path):
