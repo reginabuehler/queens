@@ -17,7 +17,7 @@
 import numpy as np
 from testbook import testbook
 
-from test_utils.tutorial_tests import inject_mock_path
+from test_utils.tutorial_tests import inject_mock_base_dir
 
 
 @testbook(
@@ -44,6 +44,6 @@ np.testing.assert_allclose(Z, Z_QUEENS)""",
         f"np.testing.assert_allclose(optimal_fun, {optimal_fun},atol=1e-12)", after=32, run=False
     )
     tb.inject(f"np.testing.assert_allclose(optimal_x, np.array({optimal_x}))", after=33, run=False)
-    inject_mock_path(tb, tmp_path)
+    inject_mock_base_dir(tb, tmp_path)
 
     tb.execute()
