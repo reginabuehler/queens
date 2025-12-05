@@ -9,7 +9,6 @@ If a tutorial of your iterator of interest is not yet available, we recommend ch
 
 .. toctree::
    :maxdepth: 1
+   :glob:
 
-   tutorials/0-onboarding
-   tutorials/1-grid-iterator-rosenbrock.ipynb
-   tutorials/2-uncertainty-propagation-and-quantification.ipynb
+   tutorials/**
