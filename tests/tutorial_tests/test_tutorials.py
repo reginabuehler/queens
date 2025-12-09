@@ -14,36 +14,36 @@
 #
 """Unit tests for jupyter notebook tutorials."""
 
+from pathlib import Path
+
 import pytest
 from testbook import testbook
+
+from test_utils.tutorial_tests import inject_mock_base_dir
 
 
 # tested jupyter notebooks should be added to the list below
 @pytest.mark.parametrize(
-    "notebook_path",
+    "paths_to_tutorial_notebooks",
     [
-        "tutorials/2-grid-iterator-rosenbrock.ipynb",
+        str(patch)
+        for patch in sorted(Path("tutorials").glob("*.ipynb"))
+        if patch.stem
+        not in {
+            t.stem.removeprefix("test_") for t in Path("tests/tutorial_tests").glob("test_*.py")
+        }
     ],
 )
-def test_notebooks(tmp_path, notebook_path):
+def test_notebooks(tmp_path, paths_to_tutorial_notebooks):
     """Parameterized test case for multiple Jupyter notebooks.
 
     The notebook is run and it is checked that it runs through without
     any errors/assertions.
     """
-    with testbook(notebook_path) as tb:
+    with testbook(paths_to_tutorial_notebooks, timeout=-1) as tb:
         # Patch base_directory to avoid writing test data to user's home dir.
         # Note that tb.patch converts the mocked Path to a string, so we have to use tb.inject.
-        tb.inject(
-            f"""
-            from unittest.mock import MagicMock
-            from pathlib import Path
-            import queens.utils.config_directories
-            mock_base_dir = Path('{tmp_path}')
-            queens.utils.config_directories.base_directory = MagicMock(return_value=mock_base_dir)
-            """,
-            before=0,
-        )
+        inject_mock_base_dir(tb, tmp_path)
 
         # execute the notebook
         tb.execute()
