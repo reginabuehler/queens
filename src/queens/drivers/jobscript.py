@@ -20,6 +20,8 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 
+import numpy as np
+
 from queens.drivers._driver import Driver
 from queens.utils.exceptions import SubprocessError
 from queens.utils.injector import inject, inject_in_template
@@ -189,7 +191,14 @@ class Jobscript(Driver):
 
         return jobscript_template
 
-    def run(self, sample, job_id, num_procs, experiment_dir, experiment_name):
+    def run(
+        self,
+        sample: np.ndarray,
+        job_id: int,
+        num_procs: int,
+        experiment_dir: Path,
+        experiment_name: str,
+    ) -> dict:
         """Run the driver.
 
         Args:
@@ -246,12 +255,16 @@ class Jobscript(Driver):
 
         return results
 
-    def _manage_paths(self, job_id, experiment_dir):
+    def _manage_paths(
+        self, job_id, experiment_dir, output_folder_name="output", output_prefix="output"
+    ):
         """Manage paths for driver run.
 
         Args:
             job_id (int): Job ID.
             experiment_dir (Path): Path to QUEENS experiment directory.
+            output_folder_name (str): Name of output folder.
+            output_prefix (str): Prefix of output file(s).
 
         Returns:
             job_dir (Path): Path to job directory.
@@ -261,10 +274,9 @@ class Jobscript(Driver):
             log_file (Path): Path to log file.
         """
         job_dir = experiment_dir / str(job_id)
-        output_dir = job_dir / "output"
+        output_dir = job_dir / output_folder_name
         output_dir = create_folder_if_not_existent(output_dir)
 
-        output_prefix = "output"
         output_file = output_dir / output_prefix
         log_file = output_dir / (output_prefix + ".log")
 
@@ -305,16 +317,17 @@ class Jobscript(Driver):
             result (np.array): Result from the driver run.
             gradient (np.array, None): Gradient from the driver run (potentially None).
         """
-        result = None
+        results = {}
         if self.data_processor:
             result = self.data_processor(output_dir)
+            results["result"] = result
             _logger.debug("Got result: %s", result)
 
-        gradient = None
         if self.gradient_data_processor:
             gradient = self.gradient_data_processor(output_dir)
+            results["gradient"] = gradient
             _logger.debug("Got gradient: %s", gradient)
-        return result, gradient
+        return results
 
     def prepare_input_files(self, sample_dict, experiment_dir, input_files):
         """Prepare and parse data to input files.
