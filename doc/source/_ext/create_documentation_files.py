@@ -286,14 +286,22 @@ def download_images():
 
 
 def copy_tutorials():
-    """Copy tutorials from source to doc."""
-    for tutorial in relative_path_from_root("tutorials").glob("*.ipynb"):
-        destination = relative_to_doc_source("tutorials/" + tutorial.name)
+    """Copy tutorials and other util and input files from source to doc."""
+    source_root = relative_path_from_root("tutorials")
+    destination_root = relative_to_doc_source("tutorials")
+    allowed_patterns = ("*.ipynb", "*.py", "*.exo", "*.yaml")
 
-        if destination.exists():
-            destination.unlink()
+    for pattern in allowed_patterns:
+        for source in source_root.rglob(pattern):
+            rel = source.relative_to(source_root)
+            destination = destination_root / rel
 
-        shutil.copyfile(tutorial, destination)
+            destination.parent.mkdir(parents=True, exist_ok=True)
+
+            if destination.exists():
+                destination.unlink()
+
+            shutil.copyfile(source, destination)
 
 
 def main():
