@@ -12,20 +12,3 @@
 # should have received a copy of the GNU Lesser General Public License along with QUEENS. If not,
 # see <https://www.gnu.org/licenses/>.
 #
-"""Utility functions for tutorial 4."""
-from pathlib import Path
-
-
-def find_repo_root(start: Path) -> Path:
-    """Find the repository root by going upwards from a starting directory.
-
-    Args:
-        start (Path): Starting directory to begin the upward search.
-
-    Returns:
-        Path: Path to the detected repository root (containing ``pyproject.toml``).
-    """
-    for p in [start, *start.parents]:
-        if (p / "pyproject.toml").exists():
-            return p
-    raise RuntimeError(f"Could not find repo root from {start}")
