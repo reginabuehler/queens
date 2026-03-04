@@ -18,18 +18,17 @@ import mpl_toolkits
 import numpy as np
 import pyvista as pv
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
+from mpl_toolkits.mplot3d.axes3d import Axes3D
 
 
-def plot_field(
-    file_path: str, field: np.ndarray, ax: mpl_toolkits.mplot3d.axes3d.Axes3D, color_bar_title: str
-) -> None:
-    """Plots a field.
+def plot_field(file_path: str, field: np.ndarray, ax: Axes3D, color_bar_title: str) -> None:
+    """Plot cell-wise field values on the surface of a mesh.
 
     Args:
-        file_path (str): Path to file.
-        field: CustomRandomField object
-        ax: Axis
-        color_bar_title: Title of color bar
+        file_path: Path to the mesh file readable by PyVista.
+        field: Cell data array of shape ``(num_cells,)``.
+        ax: 3D Matplotlib axis to plot into.
+        color_bar_title: Label shown next to the color bar.
     """
     mesh = pv.read(file_path)[0][0]
     mesh.cell_data["field"] = field

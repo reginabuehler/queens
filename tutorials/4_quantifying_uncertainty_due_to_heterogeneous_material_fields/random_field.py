@@ -22,38 +22,31 @@ from queens.parameters.random_fields._random_field import RandomField
 
 
 class CustomRandomField(RandomField):
-    """CustomRandomField class.
+    """Random field defined by an explicit expansion function.
 
     Attributes:
-            dimension: Dimension of the latent space.
-            coords: Coordinates at which the random field is evaluated.
-            dim_coords: Dimension of the random field (number of coordinates)
-            distribution: QUEENS distribution object of latent space variables
             latent_distribution: QUEENS distribution object of random field
-            expansion: Expansion of random field
+            expansion: Callable mapping ``(theta, coords) -> field``.
             coordinates: Coordinates at which the random field is evaluated.
-            dimension: Dimension of the latent distribution.
     """
 
     def __init__(
         self, coords: dict, latent_distribution: Continuous | Discrete, expansion: Callable
     ) -> None:
-        """Initialize random field object.
+        """Initialize the custom random field.
 
         Args:
-            coords: Dictionary with coordinates of discretized random field and the corresponding
-                keys
-            latent_distribution: QUEENS distribution object of latent space variables
-            expansion: Transformation from theta to mu
+            coords: Dictionary with coordinates at which the random field is evaluated.
+            latent_distribution: Distribution of the latent parameters ``theta``.
+            expansion: Function computing field values from ``(theta, coords)``.
         """
         super().__init__(coords, latent_distribution, latent_distribution.dimension)
         self.latent_distribution = latent_distribution
         self.expansion = expansion
         self.coordinates = coords["coords"]
-        self.dimension = self.latent_distribution.dimension
 
     def draw(self, num_samples: int) -> np.ndarray:
-        """Draw samples of the latent space.
+        """Draw ``num_samples`` samples of the latent space.
 
         Args:
             num_samples (int): Batch size of samples to draw
