@@ -21,16 +21,17 @@ from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
 
 def plot_field(
-    field: np.ndarray, ax: mpl_toolkits.mplot3d.axes3d.Axes3D, color_bar_title: str
+    file_path: str, field: np.ndarray, ax: mpl_toolkits.mplot3d.axes3d.Axes3D, color_bar_title: str
 ) -> None:
     """Plots a field.
 
     Args:
+        file_path (str): Path to file.
         field: CustomRandomField object
         ax: Axis
         color_bar_title: Title of color bar
     """
-    mesh = pv.read("membrane_20.e")[0][0]
+    mesh = pv.read(file_path)[0][0]
     mesh.cell_data["field"] = field
     cell_values = field
 
