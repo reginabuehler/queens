@@ -46,7 +46,7 @@ class CustomRandomField(RandomField):
             latent_distribution: QUEENS distribution object of latent space variables
             expansion: Transformation from theta to mu
         """
-        super().__init__(coords)
+        super().__init__(coords, latent_distribution, latent_distribution.dimension)
         self.latent_distribution = latent_distribution
         self.expansion = expansion
         self.coordinates = coords["coords"]
