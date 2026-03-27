@@ -154,6 +154,7 @@ class ClusterLocal(Dask):
             "job_directives_skip": job_directives_skip,
             "job_extra_directives": [job_extra_directives],
             "worker_extra_args": ["--lifetime", worker_lifetime, "--lifetime-stagger", "2m"],
+            "job_script_prologue": self.job_script_prologue,
             # keep this hardcoded to 1, the number of threads for the mpi run is handled by
             # job_extra_directives. Note that the number of workers is not the number of parallel
             # simulations!
