@@ -18,10 +18,15 @@ import numpy as np
 from testbook import testbook
 
 from test_utils.tutorial_tests import inject_mock_base_dir
+from tests.tutorial_tests.tutorial_tests_markers import markers_for_notebook
+
+NOTEBOOK_PATH = "tutorials/2_uncertainty_propagation_and_quantification.ipynb"
+
+pytestmark = markers_for_notebook(NOTEBOOK_PATH)
 
 
 @testbook(
-    "tutorials/2_uncertainty_propagation_and_quantification.ipynb",
+    NOTEBOOK_PATH,
     timeout=-1,
 )
 def test_output_tutorial_2(tb, tmp_path):

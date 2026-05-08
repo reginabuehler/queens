@@ -33,7 +33,18 @@ In QUEENS, tests are organized using pytest markers. This allows you to run all 
 | Unit tests                      | `pytest -m unit_tests`              |
 | Integration tests               | `pytest -m integration_tests`       |
 | 4C integration test (see below) | `pytest -m integration_tests_fourc` |
+| Tutorial tests                  | `pytest -m tutorial_tests`          |
+| 4C tutorial tests               | `pytest -m tutorial_tests_fourc`    |
+| Remote tutorial tests           | `pytest -m tutorial_tests_remote`   |
 | List markers                    | `pytest --markers`                  |
+
+### Adding tutorial notebook tests
+All tutorial notebooks under `tutorials/` are discovered recursively. When adding a new notebook,
+add its relative path to exactly one list in
+`tests/tutorial_tests/tutorial_tests_markers.py::TUTORIAL_NOTEBOOKS_BY_MARKER`: use
+`tutorial_tests` for regular tutorials, `tutorial_tests_fourc` for tutorials requiring 4C, and
+`tutorial_tests_remote` for tutorials requiring remote resources. Pytest collection fails if a
+notebook has no marker assignment.
 
 ### :four_leaf_clover: Integration tests with 4C
 For the integration tests in QUEENS that require the multiphysics simulation framework [4C](https://github.com/4C-multiphysics/4C), the user needs to create a **symbolic link** to the 4C-executable and store it under `<queens-base-dir>/config`:

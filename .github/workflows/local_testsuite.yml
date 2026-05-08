@@ -131,6 +131,43 @@ jobs:
           if-no-files-found: error
           retention-days: 7
 
+  run_tests_tutorials_fourc:
+    name: 4C tutorial tests (ubuntu-latest)
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/4c-multiphysics/4c-minimal:main
+      options: --user root --env OMPI_ALLOW_RUN_AS_ROOT=1 --env OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1
+    defaults:
+      run:
+        shell: bash -l {0}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: ./.github/actions/setup-queens-pixi
+        with:
+          cache: true
+          cache-write: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
+          environments: queens-dev
+          activate-environment: queens-dev
+      - name: Create links to 4C
+        run: |
+          ln -s /home/user/4C/bin/ config/4C_build
+      - name: Run pytest for 4C tutorial tests
+        run: |
+          set -euo pipefail
+
+          COVERAGE_FILE=".coverage.tutorials_fourc.${{ runner.os }}" pytest -v -m "tutorial_tests_fourc" --cov --cov-report=term $TEST_TIMING_OPTION --color=yes -o junit_logging=all --junitxml=test_junit_tutorials_fourc_${{ runner.os }}.xml
+      - name: Upload raw 4C tutorial test reports
+        if: success() || failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: raw-test-reports-tutorials-fourc-${{ runner.os }}
+          include-hidden-files: true
+          path: |
+            .coverage.tutorials_fourc.${{ runner.os }}
+            test_junit_tutorials_fourc_${{ runner.os }}.xml
+          if-no-files-found: error
+          retention-days: 7
+
   report_test_results:
     name: report test results
     if: always()
@@ -139,6 +176,7 @@ jobs:
       - run_tests_core
       - run_tests_tutorials
       - run_tests_fourc
+      - run_tests_tutorials_fourc
     defaults:
       run:
         shell: bash -l {0}
@@ -176,6 +214,11 @@ jobs:
         with:
           name: raw-test-reports-fourc-Linux
           path: reports/fourc-ubuntu
+      - name: Download raw 4C tutorial test reports
+        uses: actions/download-artifact@v8
+        with:
+          name: raw-test-reports-tutorials-fourc-Linux
+          path: reports/tutorials-fourc-ubuntu
       - name: Combine Ubuntu coverage data and build reports
         run: |
           set -euo pipefail
@@ -183,8 +226,9 @@ jobs:
           cp reports/core-ubuntu/.coverage.core.Linux .coverage.core.Linux
           cp reports/tutorials-ubuntu/.coverage.tutorials.Linux .coverage.tutorials.Linux
           cp reports/fourc-ubuntu/.coverage.fourc.Linux .coverage.fourc.Linux
+          cp reports/tutorials-fourc-ubuntu/.coverage.tutorials_fourc.Linux .coverage.tutorials_fourc.Linux
 
-          pixi run --locked -e queens-dev coverage combine .coverage.core.Linux .coverage.tutorials.Linux .coverage.fourc.Linux
+          pixi run --locked -e queens-dev coverage combine .coverage.core.Linux .coverage.tutorials.Linux .coverage.fourc.Linux .coverage.tutorials_fourc.Linux
           pixi run --locked -e queens-dev coverage html -d html_coverage_report
           pixi run --locked -e queens-dev coverage xml -o xml_coverage_report.xml
           pixi run --locked -e queens-dev coverage report

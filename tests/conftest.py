@@ -26,6 +26,7 @@ from queens.global_settings import GlobalSettings
 from queens.utils import config_directories
 from queens.utils.logger_settings import reset_logging
 from queens.utils.path import relative_path_from_root
+from tests.tutorial_tests.tutorial_tests_markers import TUTORIAL_NOTEBOOKS_BY_MARKER
 
 _logger = logging.getLogger(__name__)
 
@@ -126,7 +127,13 @@ def pytest_collection_modifyitems(items):
             if not check_item_for_marker(item, "max_time_for_test"):
                 item.add_marker(pytest.mark.max_time_for_test(10))
         elif "tutorial_tests/" in item.nodeid:
-            item.add_marker(pytest.mark.tutorial_tests)
+
+            has_tutorial_marker = any(
+                check_item_for_marker(item, marker_name)
+                for marker_name in TUTORIAL_NOTEBOOKS_BY_MARKER
+            )
+            if not has_tutorial_marker:
+                item.add_marker(pytest.mark.tutorial_tests)
 
             # Add default max_time_for_test if none was set
             if not check_item_for_marker(item, "max_time_for_test"):

@@ -18,10 +18,15 @@ import numpy as np
 from testbook import testbook
 
 from test_utils.tutorial_tests import inject_mock_base_dir
+from tests.tutorial_tests.tutorial_tests_markers import markers_for_notebook
+
+NOTEBOOK_PATH = "tutorials/1_grid_iterator_rosenbrock.ipynb"
+
+pytestmark = markers_for_notebook(NOTEBOOK_PATH)
 
 
 @testbook(
-    "tutorials/1_grid_iterator_rosenbrock.ipynb",
+    NOTEBOOK_PATH,
 )
 def test_output_tutorial_1(tb, tmp_path):
     """Parameterized test case for tutorial 1: Grid Iterator Rosenbrock.
