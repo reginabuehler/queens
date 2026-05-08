@@ -45,8 +45,8 @@ def test_notebooks(tmp_path, paths_to_tutorial_notebooks):
     any errors/assertions.
     """
     with testbook(paths_to_tutorial_notebooks, timeout=-1) as tb:
-        absolut_path_to_notebook = Path(paths_to_tutorial_notebooks).resolve().parent
-        inject_notebook_execution_context(tb, absolut_path_to_notebook)
+        notebook_dir = Path(paths_to_tutorial_notebooks).resolve().parent
+        inject_notebook_execution_context(tb, notebook_dir)
 
         # Patch base_directory to avoid writing test data to user's home dir.
         # Note that tb.patch converts the mocked Path to a string, so we have to use tb.inject.

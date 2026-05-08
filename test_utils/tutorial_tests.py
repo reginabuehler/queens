@@ -15,12 +15,12 @@
 """Utility methods used by the tutorial tests."""
 
 
-def inject_notebook_execution_context(tb, path_to_notebook):
+def inject_notebook_execution_context(tb, notebook_dir):
     """Inject the notebook directory as Python path and working directory.
 
     Args:
         tb (testbook): testbook object for inserting code into the notebook
-        path_to_notebook (str | Path): Path to the notebook under test
+        notebook_dir (str | Path): Directory conainting the notebook
 
     Returns:
         None
@@ -30,9 +30,14 @@ def inject_notebook_execution_context(tb, path_to_notebook):
         import os
         import sys
         from pathlib import Path
-        notebook_dir = Path({str(path_to_notebook)!r})
-        if str(notebook_dir) not in sys.path:
-            sys.path.insert(0, str(notebook_dir))
+        notebook_dir = Path({str(notebook_dir)!r})
+        repo_root = next(
+            path for path in (notebook_dir, *notebook_dir.parents)
+            if (path / "pyproject.toml").exists()
+        )
+        for path in (notebook_dir, repo_root):
+            if str(path) not in sys.path:
+                sys.path.insert(0, str(path))
         os.chdir(notebook_dir)
         """,
         before=0,
