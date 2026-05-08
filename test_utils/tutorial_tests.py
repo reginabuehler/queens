@@ -15,6 +15,28 @@
 """Utility methods used by the tutorial tests."""
 
 
+def inject_notebook_directory_to_path(tb, path_to_notebook):
+    """Inject the notebook directory into the notebook Python path.
+
+    Args:
+        tb (testbook): testbook object for inserting code into the notebook
+        path_to_notebook (str | Path): Path to the notebook under test
+
+    Returns:
+        None
+    """
+    tb.inject(
+        f"""
+        import sys
+        from pathlib import Path
+        notebook_dir = Path({str(path_to_notebook)!r}).resolve().parent
+        if str(notebook_dir) not in sys.path:
+            sys.path.insert(0, str(notebook_dir))
+        """,
+        before=0,
+    )
+
+
 def inject_mock_base_dir(tb, tmp_path):
     """Inject a mock base directory for testing notebooks.
 

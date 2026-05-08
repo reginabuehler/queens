@@ -15,6 +15,7 @@
 """Plotting functions for tutorial 3."""
 
 import os
+from pathlib import Path
 from typing import Any, cast
 
 os.environ["PYVISTA_OFF_SCREEN"] = "true"
@@ -23,7 +24,7 @@ os.environ["PYVISTA_JUPYTER_BACKEND"] = "static"
 
 import pyvista as pv
 
-fe_mesh = cast(pv.DataSet, cast(Any, pv.read("beam_coarse.exo")))
+fe_mesh = cast(pv.DataSet, cast(Any, pv.read(Path(__file__).with_name("beam_coarse.exo"))))
 
 
 def plot_results(

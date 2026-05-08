@@ -19,7 +19,7 @@ from pathlib import Path
 import pytest
 from testbook import testbook
 
-from test_utils.tutorial_tests import inject_mock_base_dir
+from test_utils.tutorial_tests import inject_mock_base_dir, inject_notebook_directory_to_path
 from tests.tutorial_tests.tutorial_tests_markers import ALL_TUTORIAL_NOTEBOOKS, notebook_param
 
 TUTORIAL_NOTEBOOKS_WITH_DEDICATED_TESTS = {
@@ -45,6 +45,8 @@ def test_notebooks(tmp_path, paths_to_tutorial_notebooks):
     any errors/assertions.
     """
     with testbook(paths_to_tutorial_notebooks, timeout=-1) as tb:
+        inject_notebook_directory_to_path(tb, paths_to_tutorial_notebooks)
+
         # Patch base_directory to avoid writing test data to user's home dir.
         # Note that tb.patch converts the mocked Path to a string, so we have to use tb.inject.
         inject_mock_base_dir(tb, tmp_path)
