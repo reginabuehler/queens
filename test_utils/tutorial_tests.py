@@ -15,8 +15,8 @@
 """Utility methods used by the tutorial tests."""
 
 
-def inject_notebook_directory_to_path(tb, path_to_notebook):
-    """Inject the notebook directory into the notebook Python path.
+def inject_notebook_execution_context(tb, path_to_notebook):
+    """Inject the notebook directory as Python path and working directory.
 
     Args:
         tb (testbook): testbook object for inserting code into the notebook
@@ -27,11 +27,13 @@ def inject_notebook_directory_to_path(tb, path_to_notebook):
     """
     tb.inject(
         f"""
+        import os
         import sys
         from pathlib import Path
         notebook_dir = Path({str(path_to_notebook)!r}).resolve().parent
         if str(notebook_dir) not in sys.path:
             sys.path.insert(0, str(notebook_dir))
+        os.chdir(notebook_dir)
         """,
         before=0,
     )
