@@ -30,7 +30,7 @@ def inject_notebook_execution_context(tb, path_to_notebook):
         import os
         import sys
         from pathlib import Path
-        notebook_dir = Path({str(path_to_notebook)!r}).resolve().parent
+        notebook_dir = Path({str(path_to_notebook)!r})
         if str(notebook_dir) not in sys.path:
             sys.path.insert(0, str(notebook_dir))
         os.chdir(notebook_dir)
