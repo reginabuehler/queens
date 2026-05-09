@@ -45,6 +45,13 @@ jobs:
           set -euo pipefail
 
           COVERAGE_FILE=".coverage.core.${{ runner.os }}" pytest -v -m "${{ matrix.pytest_markers }}" --cov --cov-report=term $TEST_TIMING_OPTION --color=yes -o junit_logging=all --junitxml=test_junit_core_${{ runner.os }}.xml
+      - name: Publish junit pytest report
+        if: success() || failure()
+        uses: mikepenz/action-junit-report@v6
+        with:
+          report_paths: "test_junit_*.xml"
+          annotate_only: true
+          job_summary: false
       - name: Upload raw core test reports
         if: success() || failure()
         uses: actions/upload-artifact@v7
@@ -82,6 +89,13 @@ jobs:
           set -euo pipefail
 
           COVERAGE_FILE=".coverage.tutorials.${{ runner.os }}" pytest -v -m "tutorial_tests" --cov --cov-report=term $TEST_TIMING_OPTION --color=yes -o junit_logging=all --junitxml=test_junit_tutorials_${{ runner.os }}.xml
+      - name: Publish junit pytest report
+        if: success() || failure()
+        uses: mikepenz/action-junit-report@v6
+        with:
+          report_paths: "test_junit_*.xml"
+          annotate_only: true
+          job_summary: false
       - name: Upload raw tutorial test reports
         if: success() || failure()
         uses: actions/upload-artifact@v7
@@ -119,6 +133,13 @@ jobs:
           set -euo pipefail
 
           COVERAGE_FILE=".coverage.fourc.${{ runner.os }}" pytest -v -m "integration_tests_fourc" --cov --cov-report=term $TEST_TIMING_OPTION --color=yes -o junit_logging=all --junitxml=test_junit_fourc_${{ runner.os }}.xml
+      - name: Publish junit pytest report
+        if: success() || failure()
+        uses: mikepenz/action-junit-report@v6
+        with:
+          report_paths: "test_junit_*.xml"
+          annotate_only: true
+          job_summary: false
       - name: Upload raw 4C test reports
         if: success() || failure()
         uses: actions/upload-artifact@v7
@@ -156,6 +177,13 @@ jobs:
           set -euo pipefail
 
           COVERAGE_FILE=".coverage.tutorials_fourc.${{ runner.os }}" pytest -v -m "tutorial_tests_fourc" --cov --cov-report=term $TEST_TIMING_OPTION --color=yes -o junit_logging=all --junitxml=test_junit_tutorials_fourc_${{ runner.os }}.xml
+      - name: Publish junit pytest report
+        if: success() || failure()
+        uses: mikepenz/action-junit-report@v6
+        with:
+          report_paths: "test_junit_*.xml"
+          annotate_only: true
+          job_summary: false
       - name: Upload raw 4C tutorial test reports
         if: success() || failure()
         uses: actions/upload-artifact@v7
