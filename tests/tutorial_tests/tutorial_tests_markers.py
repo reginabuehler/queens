@@ -30,7 +30,9 @@ TUTORIAL_NOTEBOOKS_BY_MARKER = {
         "tutorials/4_quantifying_uncertainty_due_to_heterogeneous_material_fields/"
         "4_quantifying_uncertainty_due_to_heterogeneous_material_fields.ipynb",
     ],
-    "tutorial_tests_remote": [],
+    "tutorial_tests_remote": [
+        "tutorials/5_grid_iterator_4c_remote/5_grid_iterator_4c_remote.ipynb"
+    ],
 }
 
 ALL_TUTORIAL_NOTEBOOKS = tuple(
