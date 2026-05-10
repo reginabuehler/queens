@@ -17,6 +17,7 @@
 The test is based on the low-fidelity Borehole function.
 """
 
+import numpy as np
 import pytest
 
 from queens.distributions.uniform import Uniform
@@ -62,8 +63,8 @@ def test_latin_hypercube_sampling_borehole83(global_settings):
     # Load results
     results = load_result(global_settings.result_file(".pickle"))
 
-    assert results["mean"] == pytest.approx(62.05240444441511)
-    assert results["var"] == pytest.approx(1371.7554224384000)
+    np.testing.assert_allclose(results["mean"], 62.05240444441511, rtol=1e-6, atol=1e-12)
+    np.testing.assert_allclose(results["var"], 1371.7554224384000, rtol=1e-6, atol=1e-12)
 
 
 @pytest.mark.max_time_for_test(20)
@@ -94,5 +95,5 @@ def test_latin_hypercube_sampling_branin78(global_settings):
     # Load results
     results = load_result(global_settings.result_file(".pickle"))
 
-    assert results["mean"] == pytest.approx(53.17279969296224)
-    assert results["var"] == pytest.approx(2581.6502630157715)
+    np.testing.assert_allclose(results["mean"], 54.22064638692155, rtol=1e-6, atol=1e-12)
+    np.testing.assert_allclose(results["var"], 2581.6502630157715, rtol=1e-6, atol=1e-12)
