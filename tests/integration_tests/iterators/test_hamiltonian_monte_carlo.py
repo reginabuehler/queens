@@ -36,7 +36,43 @@ def test_hamiltonian_monte_carlo_gaussian(
     _create_experimental_data_zero,
     global_settings,
 ):
-    """Test case for hmc iterator."""
+    """Test HMC sampling for a Gaussian-Gaussian Bayesian inference problem.
+
+    The test samples from a two-dimensional posterior with Gaussian prior and Gaussian
+    likelihood. Since both prior and likelihood are Gaussian, the posterior is Gaussian
+    again. The prior is
+
+        x ~ N(mu_0, Sigma_0),
+        mu_0 = [-2, 2]^T,
+        Sigma_0 = [[1, 0], [0, 1]].
+
+    The likelihood is evaluated at the observed value y = [0, 0]^T with
+
+        y | x ~ N(x, Sigma_L),
+        Sigma_L = [[1, 1/2], [1/2, 1]].
+
+    Therefore,
+
+        Sigma_p = (Sigma_0^{-1} + Sigma_L^{-1})^{-1}
+                = [[7/15, 2/15], [2/15, 7/15]],
+
+        mu_p = Sigma_p (Sigma_0^{-1} mu_0 + Sigma_L^{-1} y)
+             = Sigma_p mu_0
+             = [-2/3, 2/3]^T.
+
+    The converged Markov chain should therefore approximate
+
+        E[x | y] = [-2/3, 2/3]^T,
+        Var[x | y] = [7/15, 7/15],
+        Std[x | y] = [sqrt(7/15), sqrt(7/15)].
+
+    Note:
+        This behaviour is achieved by patching the Gaussian likelihood model
+        evaluation and gradient with ``target_density_gaussian_2d_with_grad``.
+        Instead of evaluating against the experimental data, the likelihood is
+        replaced by a fixed analytic Gaussian log-density corresponding to the
+        target distribution described above.
+    """
     # Parameters
     x1 = Normal(mean=[-2.0, 2.0], covariance=[[1.0, 0.0], [0.0, 1.0]])
     parameters = Parameters(x1=x1)
