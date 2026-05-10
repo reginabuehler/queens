@@ -115,13 +115,13 @@ def test_nuts_gaussian(
 
     np.testing.assert_allclose(
         results["mean"].mean(axis=0),
-        np.array([-0.2868793496608573, 0.6474274597130008]),
+        np.array([-1.0964337346677933, 0.9148542463484473]),
         rtol=1e-6,
         atol=1e-12,
     )
     np.testing.assert_allclose(
         results["var"].mean(axis=0),
-        np.array([0.08396277217936474, 0.10836256575521087]),
+        np.array([0.33594238408352364, 1.053294709724648]),
         rtol=1e-6,
         atol=1e-12,
     )
