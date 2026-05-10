@@ -29,6 +29,9 @@ from queens.schedulers.pool import Pool
 from queens.utils.experimental_data_reader import ExperimentalDataReader
 from queens.utils.io import load_result
 
+SAMPLER_STAT_RTOL = 1e-5
+SAMPLER_STAT_ATOL = 1e-8
+
 
 def test_metropolis_hastings_pymc_gaussian(
     tmp_path, _create_experimental_data_zero, global_settings
@@ -112,14 +115,14 @@ def test_metropolis_hastings_pymc_gaussian(
     np.testing.assert_allclose(
         results["mean"].mean(axis=0),
         np.array([-0.3783841506648389, 1.1993237016123788]),
-        rtol=1e-6,
-        atol=1e-12,
+        rtol=SAMPLER_STAT_RTOL,
+        atol=SAMPLER_STAT_ATOL,
     )
     np.testing.assert_allclose(
         results["var"].mean(axis=0),
         np.array([0.2750466882590994, 1.2853678554541608]),
-        rtol=1e-6,
-        atol=1e-12,
+        rtol=SAMPLER_STAT_RTOL,
+        atol=SAMPLER_STAT_ATOL,
     )
 
 

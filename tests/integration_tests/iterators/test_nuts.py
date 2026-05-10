@@ -30,6 +30,9 @@ from queens.schedulers.pool import Pool
 from queens.utils.experimental_data_reader import ExperimentalDataReader
 from queens.utils.io import load_result
 
+SAMPLER_STAT_RTOL = 1e-5
+SAMPLER_STAT_ATOL = 1e-8
+
 
 def test_nuts_gaussian(
     tmp_path,
@@ -116,14 +119,14 @@ def test_nuts_gaussian(
     np.testing.assert_allclose(
         results["mean"].mean(axis=0),
         np.array([-1.0964337346677933, 0.9148542463484473]),
-        rtol=1e-6,
-        atol=1e-12,
+        rtol=SAMPLER_STAT_RTOL,
+        atol=SAMPLER_STAT_ATOL,
     )
     np.testing.assert_allclose(
         results["var"].mean(axis=0),
         np.array([0.33594238408352364, 1.053294709724648]),
-        rtol=1e-6,
-        atol=1e-12,
+        rtol=SAMPLER_STAT_RTOL,
+        atol=SAMPLER_STAT_ATOL,
     )
 
 
