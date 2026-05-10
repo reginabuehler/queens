@@ -113,10 +113,18 @@ def test_nuts_gaussian(
     # Load results
     results = load_result(global_settings.result_file(".pickle"))
 
-    assert results["mean"].mean(axis=0) == pytest.approx(
-        np.array([-0.2868793496608573, 0.6474274597130008])
+    np.testing.assert_allclose(
+        results["mean"].mean(axis=0),
+        np.array([-0.2868793496608573, 0.6474274597130008]),
+        rtol=1e-6,
+        atol=1e-12,
     )
-    assert results["var"].mean(axis=0) == pytest.approx([0.08396277217936474, 0.10836256575521087])
+    np.testing.assert_allclose(
+        results["var"].mean(axis=0),
+        np.array([0.08396277217936474, 0.10836256575521087]),
+        rtol=1e-6,
+        atol=1e-12,
+    )
 
 
 @pytest.fixture(name="_create_experimental_data")
