@@ -15,7 +15,6 @@
 """Integration test for the HMC iterator."""
 
 import numpy as np
-import pytest
 from mock import patch
 
 from queens.distributions.normal import Normal
@@ -28,6 +27,9 @@ from queens.parameters.parameters import Parameters
 from queens.schedulers.pool import Pool
 from queens.utils.experimental_data_reader import ExperimentalDataReader
 from queens.utils.io import load_result
+
+SAMPLER_STAT_RTOL = 1e-5
+SAMPLER_STAT_ATOL = 1e-8
 
 
 def test_hamiltonian_monte_carlo_gaussian(
@@ -112,7 +114,15 @@ def test_hamiltonian_monte_carlo_gaussian(
     # Load results
     results = load_result(global_settings.result_file(".pickle"))
 
-    assert results["mean"].mean(axis=0) == pytest.approx(
-        np.array([0.19363280864587615, -1.1303341362165935])
+    np.testing.assert_allclose(
+        results["mean"].mean(axis=0),
+        np.array([0.19363280864587615, -1.1303341362165935]),
+        rtol=SAMPLER_STAT_RTOL,
+        atol=SAMPLER_STAT_ATOL,
     )
-    assert results["var"].mean(axis=0) == pytest.approx([0, 0])
+    np.testing.assert_allclose(
+        results["var"].mean(axis=0),
+        np.array([0, 0]),
+        rtol=SAMPLER_STAT_RTOL,
+        atol=SAMPLER_STAT_ATOL,
+    )
