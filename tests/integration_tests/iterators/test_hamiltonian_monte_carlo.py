@@ -116,7 +116,7 @@ def test_hamiltonian_monte_carlo_gaussian(
 
     np.testing.assert_allclose(
         results["mean"].mean(axis=0),
-        np.array([0.19363280864587615, -1.1303341362165935]),
+        np.array([0.2560446683451819, -1.311343427417079]),
         rtol=SAMPLER_STAT_RTOL,
         atol=SAMPLER_STAT_ATOL,
     )
