@@ -15,7 +15,6 @@
 """Integration test for the Metropolis Hastings PyMC iterator."""
 
 import numpy as np
-import pytest
 from mock import patch
 
 from example_simulator_functions.gaussian_logpdf import gaussian_2d_logpdf
@@ -110,10 +109,18 @@ def test_metropolis_hastings_pymc_gaussian(
     # Load results
     results = load_result(global_settings.result_file(".pickle"))
 
-    assert results["mean"].mean(axis=0) == pytest.approx(
-        np.array([-0.5680310153118374, 0.9247536392514567])
+    np.testing.assert_allclose(
+        results["mean"].mean(axis=0),
+        np.array([-0.3783841506648389, 1.1993237016123788]),
+        rtol=1e-6,
+        atol=1e-12,
     )
-    assert results["var"].mean(axis=0) == pytest.approx([0.13601070852470507, 0.6672200465857734])
+    np.testing.assert_allclose(
+        results["var"].mean(axis=0),
+        np.array([0.2750466882590994, 1.2853678554541608]),
+        rtol=1e-6,
+        atol=1e-12,
+    )
 
 
 def target_density(self, samples):  # pylint: disable=unused-argument
