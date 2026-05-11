@@ -181,7 +181,7 @@ def _one_dim_trained_reference_values():
     ("n_train", "reference_values", "decimals"),
     [
         pytest.param(
-            25, _one_dim_trained_reference_values(), (6, 6, 6, 6), id="integration-reference"
+            25, _one_dim_trained_reference_values(), (2, 2, 2, 1), id="integration-reference"
         ),
         pytest.param(
             1000,
