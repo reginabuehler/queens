@@ -33,12 +33,33 @@ def fixture_my_model():
         adams_training_rate=0.001,
         batch_size=50,
         num_epochs=3000,
-        optimizer_seed=42,
+        seed=42,
         data_scaling="standard_scaler",
         nugget_std=1.0e-02,
         verbosity_on=False,
     )
     return model
+
+
+def test_gaussian_neural_network_default_initializer_trains_with_seed():
+    """Test seeded training with the default kernel initializer."""
+    rng = np.random.default_rng(1)
+    x_train = rng.normal(size=(16, 3))
+    y_train = np.sum(x_train, axis=1).reshape(-1, 1)
+    model = GaussianNeuralNetwork(
+        activation_per_hidden_layer_lst=["elu"],
+        nodes_per_hidden_layer_lst=[5],
+        adams_training_rate=0.001,
+        batch_size=8,
+        num_epochs=1,
+        seed=42,
+        data_scaling="standard_scaler",
+        nugget_std=1.0e-05,
+        verbosity_on=False,
+    )
+
+    model.setup(x_train, y_train)
+    model.train()
 
 
 def test_gaussian_neural_network_one_dim(my_model):
