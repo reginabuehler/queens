@@ -32,6 +32,7 @@ In QUEENS, tests are organized using pytest markers. This allows you to run all 
 | ------------------------------- | ----------------------------------- |
 | Unit tests                      | `pytest -m unit_tests`              |
 | Integration tests               | `pytest -m integration_tests`       |
+| Convergence tests               | `pytest -m convergence_tests`       |
 | 4C integration test (see below) | `pytest -m integration_tests_fourc` |
 | Tutorial tests                  | `pytest -m tutorial_tests`          |
 | 4C tutorial tests               | `pytest -m tutorial_tests_fourc`    |

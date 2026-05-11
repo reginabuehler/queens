@@ -121,6 +121,9 @@ def pytest_collection_modifyitems(items):
             # Pytest markers are set individually in each cluster integration test
             continue
         elif "integration_tests/" in item.nodeid:
+            if check_item_for_marker(item, "convergence_tests"):
+                continue
+
             item.add_marker(pytest.mark.integration_tests)
 
             # Add default max_time_for_test if none was set

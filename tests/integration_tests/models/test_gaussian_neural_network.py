@@ -62,23 +62,20 @@ def test_gaussian_neural_network_default_initializer_trains_with_seed():
     model.train()
 
 
-def test_gaussian_neural_network_one_dim(my_model):
-    """Test one dimensional gaussian nn."""
-    n_train = 25
-    x_train = np.linspace(-5, 5, n_train).reshape(-1, 1)
-    y_train = sinus_test_fun(x_train)
+X_TEST_ONE_DIM = np.linspace(-5, 5, 20).reshape(-1, 1)
 
-    my_model.setup(x_train, y_train)
-    my_model.train()
 
-    # evaluate the testing/benchmark function at testing inputs
-    x_test = np.linspace(-5, 5, 20).reshape(-1, 1)
-
-    # Converged values would be:
-    mean_ref, gradient_mean_ref = gradient_sinus_test_fun(x_test)
+def _one_dim_converged_reference_values():
+    """Reference values for the converged one-dimensional sine test."""
+    mean_ref, gradient_mean_ref = gradient_sinus_test_fun(X_TEST_ONE_DIM)
     var_ref = np.zeros(mean_ref.shape)
     gradient_variance_ref = np.zeros(gradient_mean_ref.shape)
 
+    return mean_ref, var_ref, gradient_mean_ref, gradient_variance_ref
+
+
+def _one_dim_trained_reference_values():
+    """Reference values for the regular one-dimensional integration test."""
     mean_ref = np.array(
         [
             [1.05701616],
@@ -177,14 +174,43 @@ def test_gaussian_neural_network_one_dim(my_model):
         ]
     )
 
+    return mean_ref, var_ref, gradient_mean_ref, gradient_variance_ref
+
+
+@pytest.mark.parametrize(
+    ("n_train", "reference_values", "decimals"),
+    [
+        pytest.param(
+            25, _one_dim_trained_reference_values(), (6, 6, 6, 6), id="integration-reference"
+        ),
+        pytest.param(
+            1000,
+            _one_dim_converged_reference_values(),
+            (2, 4, 0, 8),
+            marks=pytest.mark.convergence_tests,
+            id="convergence-reference",
+        ),
+    ],
+)
+def test_gaussian_neural_network_one_dim(my_model, n_train, reference_values, decimals):
+    """Test one dimensional gaussian nn."""
+    x_train = np.linspace(-5, 5, n_train).reshape(-1, 1)
+    y_train = sinus_test_fun(x_train)
+
+    my_model.setup(x_train, y_train)
+    my_model.train()
+
+    x_test = X_TEST_ONE_DIM
+    mean_ref, var_ref, gradient_mean_ref, gradient_variance_ref = reference_values
+
     # --- get the mean and variance of the model (no gradient call here) ---
     output = my_model.predict(x_test)
-    assert_surrogate_model_output(output, mean_ref, var_ref, decimals=(6, 6, 6, 6))
+    assert_surrogate_model_output(output, mean_ref, var_ref, decimals=decimals)
 
     # -- now call the gradient function of the model---
     output = my_model.predict(x_test, gradient_bool=True)
     assert_surrogate_model_output(
-        output, mean_ref, var_ref, gradient_mean_ref, gradient_variance_ref, decimals=(6, 6, 6, 6)
+        output, mean_ref, var_ref, gradient_mean_ref, gradient_variance_ref, decimals=decimals
     )
 
 

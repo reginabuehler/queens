@@ -116,6 +116,7 @@ testpaths = ["tests"]
 pythonpath = ["test_utils"]
 markers = [
     "benchmark: Benchmark tests, involving full QUEENS-iterator runs for performance benchmarks (excluded from the main pipeline)",
+    "convergence_tests: Convergence tests with higher sample counts or tighter analytical references",
     "integration_tests: Integration tests with Python interface",
     "unit_tests: Unit tests",
     "tutorial_tests: Tutorial tests that require no specialized tutorial resources",
