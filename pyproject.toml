@@ -245,6 +245,9 @@ diversipy = ">=0.9"
 particles = { git = "https://github.com/nchopin/particles.git"}
 scikit-activeml= ">=1.0.0"
 
+[tool.pixi.feature.base.tasks]
+install-editable = "python -m pip install --no-deps --no-build-isolation -e ."
+
 [tool.pixi.feature.dev.dependencies]
 pylint = ">=4.0.5"
 isort = ">=8.0.1"

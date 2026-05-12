@@ -23,7 +23,8 @@ try:
 except ImportError as exc:
     raise ImportError(
         "The required packages to construct random fields in QUEENS for 4C are not installed."
-        " Please install them via \n mamba env update -n <queens-env-name> -f environment.fourc.yml"
+        " Install QUEENS with the 'fourc' extra, e.g. `python -m pip install \".[fourc]\"`, "
+        "or use a Pixi environment with the fourc feature such as `queens-dev` or `queens-all`."
     ) from exc
 
 

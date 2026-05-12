@@ -45,12 +45,12 @@ have to solve them yourself.
 ### :fishing_pole_and_fish: Pull requests
 
 #### 1. Install QUEENS in developer mode
-Install QUEENS as described in the [README.md](README.md). The development environment is covered by
-the standard `mamba env ...` workflow in the README, so no additional dependency installation step is
-required. To expose your local checkout inside that environment, run:
+Install QUEENS as described in the [README.md](https://github.com/queens-py/queens/blob/main/README.md).
+For contributions, use the Pixi development environment and expose your local clone inside it:
 <!---installation_develop marker, do not remove this comment-->
-```
-pip install --no-deps -e .
+```bash
+pixi install --environment queens-dev
+pixi run -e queens-dev install-editable
 ```
 <!---installation_develop marker, do not remove this comment-->
 

@@ -15,7 +15,14 @@ Therefore, we test the QUEENS code base
 - Whenever possible, use [pytest fixtures](https://docs.pytest.org/en/latest/explanation/fixtures.html) to parameterize tests.
 
 ## :running_woman: Running tests
-QUEENS is tested using [pytest](https://docs.pytest.org/en/stable/index.html). For a comprehensive list of pytest commands, see [here](https://docs.pytest.org/en/stable/how-to/usage.html). Some additional useful commands to test QUEENS are listed in the following:
+QUEENS is tested using [pytest](https://docs.pytest.org/en/stable/index.html). For local
+development, run tests through the Pixi development environment, for example:
+
+```bash
+pixi run -e queens-dev pytest
+```
+
+For a comprehensive list of pytest commands, see [here](https://docs.pytest.org/en/stable/how-to/usage.html). Some additional useful commands to test QUEENS are listed in the following:
 
 | Test                          | Command                                       |
 | ----------------------------- | --------------------------------------------- |

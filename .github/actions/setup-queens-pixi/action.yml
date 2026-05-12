@@ -48,7 +48,7 @@ runs:
       shell: bash
       run: |
         set -euo pipefail
-        pixi run --locked -e "${{ inputs.activate-environment }}" python -m pip install --no-deps -e .
+        pixi run --locked -e "${{ inputs.activate-environment }}" install-editable
 
     - name: Mark repo as safe for git
       shell: bash
