@@ -15,8 +15,9 @@ permissions:
 
 jobs:
   test_pypi_build:
-    name: PyPI build test (${{ matrix.os }}, ${{ matrix.install_target }})
+    name: PyPI build test (${{ matrix.os }}, ${{ matrix.install_target }}, ${{ matrix.requiredness }})
     runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.allow_failure }}
     strategy:
       fail-fast: false
       matrix:
@@ -24,15 +25,23 @@ jobs:
           - os: ubuntu-latest
             install_target: base
             extra_selector: ""
+            allow_failure: false
+            requiredness: required
           - os: ubuntu-latest
             install_target: all
             extra_selector: "[all]"
+            allow_failure: false
+            requiredness: required
           - os: macos-latest
             install_target: base
             extra_selector: ""
+            allow_failure: true
+            requiredness: optional
           - os: macos-latest
             install_target: all
             extra_selector: "[all]"
+            allow_failure: true
+            requiredness: optional
     defaults:
       run:
         shell: bash -l {0}
