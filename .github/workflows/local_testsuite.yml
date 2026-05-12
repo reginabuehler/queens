@@ -262,8 +262,14 @@ jobs:
           pixi run --locked -e queens-dev coverage report
 
           python .github/xml_summaries_to_md.py \
+            xml_coverage_report.xml \
             reports/core-ubuntu/test_junit_core_Linux.xml \
-            xml_coverage_report.xml >> "$GITHUB_STEP_SUMMARY"
+            reports/core-macos/test_junit_core_macOS.xml \
+            reports/tutorials-ubuntu/test_junit_tutorials_Linux.xml \
+            reports/tutorials-macos/test_junit_tutorials_macOS.xml \
+            reports/fourc-ubuntu/test_junit_fourc_Linux.xml \
+            reports/tutorials-fourc-ubuntu/test_junit_tutorials_fourc_Linux.xml \
+            >> "$GITHUB_STEP_SUMMARY"
       - name: Publish combined junit pytest report
         if: success() || failure()
         uses: mikepenz/action-junit-report@v6
