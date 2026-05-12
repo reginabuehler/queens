@@ -270,13 +270,6 @@ jobs:
             reports/fourc-ubuntu/test_junit_fourc_Linux.xml \
             reports/tutorials-fourc-ubuntu/test_junit_tutorials_fourc_Linux.xml \
             >> "$GITHUB_STEP_SUMMARY"
-      - name: Publish combined junit pytest report
-        if: success() || failure()
-        uses: mikepenz/action-junit-report@v6
-        with:
-          report_paths: "reports/**/*.xml"
-          annotate_only: true
-          job_summary: false
       - name: Upload combined coverage report
         uses: actions/upload-pages-artifact@v5
         with:
