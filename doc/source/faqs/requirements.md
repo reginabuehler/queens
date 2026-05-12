@@ -14,3 +14,7 @@ environments are declared in `pyproject.toml` and locked in `pixi.lock`:
 - `queens-all`: runtime extras without development tools
 
 For installation information see the [README.md](https://github.com/queens-py/queens/blob/main/README.md).
+
+## Changing the requirements
+For instructions on adding, removing, or updating dependencies, see the
+[contributing guide](../contributing.md#changing-dependencies).
