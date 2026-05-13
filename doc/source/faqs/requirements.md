@@ -17,4 +17,4 @@ For installation information see the [README.md](https://github.com/queens-py/qu
 
 ## Changing the requirements
 For instructions on adding, removing, or updating dependencies, see the
-[contributing guide](../contributing.md#changing-dependencies).
+[contributing guide](../contributing.md).
