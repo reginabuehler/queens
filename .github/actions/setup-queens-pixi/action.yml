@@ -4,10 +4,6 @@ description: >
   and optionally ensure rsync is available.
 
 inputs:
-  pixi-version:
-    description: Pixi version to install.
-    required: false
-    default: v0.67.0
   cache:
     description: Whether setup-pixi should enable caching.
     required: false
@@ -42,7 +38,7 @@ runs:
   steps:
     - uses: prefix-dev/setup-pixi@v0.9.5
       with:
-        pixi-version: ${{ inputs.pixi-version }}
+        pixi-version: v0.68.1
         cache: ${{ inputs.cache }}
         cache-write: ${{ inputs.cache-write }}
         run-install: ${{ inputs.run-install }}
