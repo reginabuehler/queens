@@ -1,7 +1,6 @@
-# yamllint disable
 name: Test PyPI build
 
-on:
+"on":
   schedule:
     - cron: "0 1 * * *"
   pull_request:
@@ -15,7 +14,9 @@ permissions:
 
 jobs:
   test_pypi_build:
-    name: PyPI build test (${{ matrix.os }}, ${{ matrix.install_target }}, ${{ matrix.requiredness }})
+    name: >-
+      PyPI build test
+      (${{ matrix.os }}, ${{ matrix.install_target }}, ${{ matrix.requiredness }})
     runs-on: ${{ matrix.os }}
     continue-on-error: ${{ matrix.allow_failure }}
     strategy:

@@ -1,7 +1,6 @@
-# yamllint disable
 name: Update Pixi lockfile
 
-on:
+"on":
   workflow_dispatch:
   schedule:
     - cron: "0 5 1 * *"

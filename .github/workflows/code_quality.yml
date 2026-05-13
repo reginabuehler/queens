@@ -1,7 +1,6 @@
-# yamllint disable
 name: Code quality
 
-on:
+"on":
   schedule:
     - cron: "0 1 * * *"
   pull_request:
@@ -76,7 +75,8 @@ jobs:
               exit "${pyproject_check_status}"
             fi
           fi
-          echo "Pyproject.toml dependency sections changed compared to ${base_ref}: ${pyproject_changed}"
+          echo "Pyproject.toml dependency sections changed compared to ${base_ref}:" \
+            "${pyproject_changed}"
           echo "::endgroup::"
 
           echo "::group::Check if pixi.lock would be updated by pixi lock..."
@@ -112,7 +112,9 @@ jobs:
           {
             echo "### Pixi Environment Integrity"
             echo ""
-            echo "- dependency-relevant \`pyproject.toml\` changes vs \`${base_ref}\`: ${pyproject_changed}"
+            echo "- dependency-relevant \`pyproject.toml\` changes:"
+            echo "  - compare ref: \`${base_ref}\`"
+            echo "  - changed: ${pyproject_changed}"
             echo "- \`pixi.lock\` would change if refreshed: ${lock_update_possible}"
 
             if [ "${pyproject_changed}" = "true" ]; then
@@ -168,7 +170,11 @@ jobs:
           set -euo pipefail
 
           echo "::group::Create an rc file for the license header check..."
-          python .gitlab/pipeline_utils/create_licenserc.py --template_file ".gitlab/pipeline_utils/.licenserc_template.yaml" --text_file "license_header.tmpl" --output_file ".licenserc.yaml" --placeholder "license_header"
+          python .gitlab/pipeline_utils/create_licenserc.py \
+            --template_file ".gitlab/pipeline_utils/.licenserc_template.yaml" \
+            --text_file "license_header.tmpl" \
+            --output_file ".licenserc.yaml" \
+            --placeholder "license_header"
           echo "::endgroup::"
 
       - name: Check license headers
@@ -204,11 +210,6 @@ jobs:
           echo "::group::Run pylint on integration tests..."
           pylint --rcfile=.pylintrc --disable=duplicate-code tests/integration_tests/
           echo "::endgroup::"
-
-          # echo "::group::Create code quality report..."
-          # pylint src/ tests --rcfile=.pylintrc --output-format=json:pylint_warnings.json --fail-under 0
-          # python .gitlab/pipeline_utils/code_quality_creator.py pylint_warnings.json
-          # echo "::endgroup::"
 
       - name: Run ruff
         run: |

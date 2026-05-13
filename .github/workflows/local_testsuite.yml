@@ -1,7 +1,6 @@
-# yamllint disable
 name: Testsuite
 
-on:
+"on":
   schedule:
     - cron: "0 1 * * *"
   pull_request:
@@ -41,10 +40,19 @@ jobs:
           environments: queens-dev
           activate-environment: queens-dev
       - name: Run pytest for unit tests and integration tests
+        env:
+          COVERAGE_FILE: .coverage.core.${{ runner.os }}
         run: |
           set -euo pipefail
 
-          COVERAGE_FILE=".coverage.core.${{ runner.os }}" pytest -v -m "${{ matrix.pytest_markers }}" --cov --cov-report=term $TEST_TIMING_OPTION --color=yes -o junit_logging=all --junitxml=test_junit_core_${{ runner.os }}.xml
+          pytest -v \
+            -m "${{ matrix.pytest_markers }}" \
+            --cov \
+            --cov-report=term \
+            $TEST_TIMING_OPTION \
+            --color=yes \
+            -o junit_logging=all \
+            --junitxml="test_junit_core_${{ runner.os }}.xml"
       - name: Publish junit pytest report
         if: success() || failure()
         uses: mikepenz/action-junit-report@v6
@@ -85,10 +93,19 @@ jobs:
           environments: queens-dev
           activate-environment: queens-dev
       - name: Run pytest for tutorial tests
+        env:
+          COVERAGE_FILE: .coverage.tutorials.${{ runner.os }}
         run: |
           set -euo pipefail
 
-          COVERAGE_FILE=".coverage.tutorials.${{ runner.os }}" pytest -v -m "tutorial_tests" --cov --cov-report=term $TEST_TIMING_OPTION --color=yes -o junit_logging=all --junitxml=test_junit_tutorials_${{ runner.os }}.xml
+          pytest -v \
+            -m "tutorial_tests" \
+            --cov \
+            --cov-report=term \
+            $TEST_TIMING_OPTION \
+            --color=yes \
+            -o junit_logging=all \
+            --junitxml="test_junit_tutorials_${{ runner.os }}.xml"
       - name: Publish junit pytest report
         if: success() || failure()
         uses: mikepenz/action-junit-report@v6
@@ -129,10 +146,19 @@ jobs:
         run: |
           ln -s /home/user/4C/bin/ config/4C_build
       - name: Run pytest for 4C integration tests
+        env:
+          COVERAGE_FILE: .coverage.fourc.${{ runner.os }}
         run: |
           set -euo pipefail
 
-          COVERAGE_FILE=".coverage.fourc.${{ runner.os }}" pytest -v -m "integration_tests_fourc" --cov --cov-report=term $TEST_TIMING_OPTION --color=yes -o junit_logging=all --junitxml=test_junit_fourc_${{ runner.os }}.xml
+          pytest -v \
+            -m "integration_tests_fourc" \
+            --cov \
+            --cov-report=term \
+            $TEST_TIMING_OPTION \
+            --color=yes \
+            -o junit_logging=all \
+            --junitxml="test_junit_fourc_${{ runner.os }}.xml"
       - name: Publish junit pytest report
         if: success() || failure()
         uses: mikepenz/action-junit-report@v6
@@ -173,10 +199,19 @@ jobs:
         run: |
           ln -s /home/user/4C/bin/ config/4C_build
       - name: Run pytest for 4C tutorial tests
+        env:
+          COVERAGE_FILE: .coverage.tutorials_fourc.${{ runner.os }}
         run: |
           set -euo pipefail
 
-          COVERAGE_FILE=".coverage.tutorials_fourc.${{ runner.os }}" pytest -v -m "tutorial_tests_fourc" --cov --cov-report=term $TEST_TIMING_OPTION --color=yes -o junit_logging=all --junitxml=test_junit_tutorials_fourc_${{ runner.os }}.xml
+          pytest -v \
+            -m "tutorial_tests_fourc" \
+            --cov \
+            --cov-report=term \
+            $TEST_TIMING_OPTION \
+            --color=yes \
+            -o junit_logging=all \
+            --junitxml="test_junit_tutorials_fourc_${{ runner.os }}.xml"
       - name: Publish junit pytest report
         if: success() || failure()
         uses: mikepenz/action-junit-report@v6
@@ -254,9 +289,15 @@ jobs:
           cp reports/core-ubuntu/.coverage.core.Linux .coverage.core.Linux
           cp reports/tutorials-ubuntu/.coverage.tutorials.Linux .coverage.tutorials.Linux
           cp reports/fourc-ubuntu/.coverage.fourc.Linux .coverage.fourc.Linux
-          cp reports/tutorials-fourc-ubuntu/.coverage.tutorials_fourc.Linux .coverage.tutorials_fourc.Linux
+          cp \
+            reports/tutorials-fourc-ubuntu/.coverage.tutorials_fourc.Linux \
+            .coverage.tutorials_fourc.Linux
 
-          pixi run --locked -e queens-dev coverage combine .coverage.core.Linux .coverage.tutorials.Linux .coverage.fourc.Linux .coverage.tutorials_fourc.Linux
+          pixi run --locked -e queens-dev coverage combine \
+            .coverage.core.Linux \
+            .coverage.tutorials.Linux \
+            .coverage.fourc.Linux \
+            .coverage.tutorials_fourc.Linux
           pixi run --locked -e queens-dev coverage html -d html_coverage_report
           pixi run --locked -e queens-dev coverage xml -o xml_coverage_report.xml
           pixi run --locked -e queens-dev coverage report

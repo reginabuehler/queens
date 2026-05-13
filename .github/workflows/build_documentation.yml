@@ -1,7 +1,6 @@
-# yamllint disable
 name: Build documentation
 
-on:
+"on":
   pull_request:
   push:
     branches:
