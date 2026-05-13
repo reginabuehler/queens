@@ -7,12 +7,7 @@ We believe that documentation is essential and therefore welcome any improvement
 ## :woman_teacher: Build the documentation
 
 To build the documentation, first set up the QUEENS development environment as described in the
-[README](../README.md):
-
-```bash
-pixi install --environment queens-dev
-pixi run -e queens-dev install-editable
-```
+[README](../README.md).
 
 Next, register the environment as a Jupyter kernel with:
 
