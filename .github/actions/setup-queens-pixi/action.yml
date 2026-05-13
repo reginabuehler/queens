@@ -1,5 +1,7 @@
 name: Setup QUEENS pixi environment
-description: Set up pixi, install QUEENS editable into the selected environment, and optionally ensure rsync is available.
+description: >
+  Set up pixi, install QUEENS editable into the selected environment,
+  and optionally ensure rsync is available.
 
 inputs:
   pixi-version:
@@ -14,6 +16,10 @@ inputs:
     description: Whether setup-pixi should write to the cache.
     required: false
     default: "false"
+  run-install:
+    description: Whether setup-pixi should install the selected pixi environments.
+    required: false
+    default: "true"
   environments:
     description: Whitespace-separated list of pixi environments to install.
     required: false
@@ -39,6 +45,7 @@ runs:
         pixi-version: ${{ inputs.pixi-version }}
         cache: ${{ inputs.cache }}
         cache-write: ${{ inputs.cache-write }}
+        run-install: ${{ inputs.run-install }}
         environments: ${{ inputs.environments }}
         frozen: true
         activate-environment: ${{ inputs.activate-environment }}
