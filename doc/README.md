@@ -18,7 +18,7 @@ pixi run -e queens-dev python -m ipykernel install --user --name queens --displa
 When building the documentation on your machine for the first time or after adding new modules or classes to QUEENS, one needs to first rebuild the `autodoc index` by running:
 
 ```bash
-cd <queens-base-directory>
+cd <queens-root-directory>
 pixi run -e queens-dev sphinx-apidoc -o doc/source src/ -fMT
 ```
 

@@ -73,11 +73,12 @@ pip install ".[all]"
 We recommend a modern project-based workflow based on [Pixi](https://pixi.sh/latest/) especially for development.
 After cloning the repository, installing with Pixi is as easy as:
 ```bash
-pixi install --environment queens-base
-pixi run -e queens-base install-editable
+pixi install
+pixi run install-editable
 ```
-Use the `queens-base` environment for core QUEENS or `queens-all` for runtime extras without development tools.
-Run `pixi run -e <environment> install-editable` once for each Pixi environment you want to use.
+The default Pixi environment contains the core QUEENS dependencies. Use `queens-all` for runtime
+extras without development tools. For named Pixi environments, run
+`pixi run -e <environment> install-editable` once for each environment you want to use.
 
 ### Development installation
 For development, we recommend using [Pixi](https://pixi.sh/latest/) together with the `queens-dev` environment.

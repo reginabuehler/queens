@@ -9,9 +9,9 @@ QUEENS declares its Python dependencies in `pyproject.toml`.
 For development and CI-like reproducibility, dependencies are managed with Pixi. The Pixi
 environments are declared in `pyproject.toml` and locked in `pixi.lock`:
 
-- `queens-base`: core QUEENS dependencies
-- `queens-dev`: full contributor setup, including development tools, tutorials, and 4C support
+- `default`: core QUEENS dependencies
 - `queens-all`: runtime extras without development tools
+- `queens-dev`: full contributor setup, including development tools, tutorials, and 4C support
 
 For installation information see the [README.md](https://github.com/queens-py/queens/blob/main/README.md).
 

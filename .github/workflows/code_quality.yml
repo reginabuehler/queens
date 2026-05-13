@@ -31,7 +31,7 @@ jobs:
           cache: true
           cache-write: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
           environments: >-
-            queens-base
+            default
             queens-all
             queens-dev
           activate-environment: queens-dev

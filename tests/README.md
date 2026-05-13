@@ -55,7 +55,7 @@ add its relative path to exactly one list in
 notebook has no marker assignment.
 
 ### :four_leaf_clover: Integration tests with 4C
-For the integration tests in QUEENS that require the multiphysics simulation framework [4C](https://github.com/4C-multiphysics/4C), the user needs to create a **symbolic link** to the 4C-executable and store it under `<queens-base-dir>/config`:
+For the integration tests in QUEENS that require the multiphysics simulation framework [4C](https://github.com/4C-multiphysics/4C), the user needs to create a **symbolic link** to the 4C-executable and store it under `<queens-root-dir>/config`:
 ```
-ln -s <path-to-4C-build-directory> <queens-base-dir>/config/4C_build
+ln -s <path-to-4C-build-directory> <queens-root-dir>/config/4C_build
 ```
