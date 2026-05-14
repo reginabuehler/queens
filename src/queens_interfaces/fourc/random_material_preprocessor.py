@@ -24,7 +24,7 @@ except ImportError as exc:
     raise ImportError(
         "The required packages to construct random fields in QUEENS for 4C are not installed."
         " Install QUEENS with the 'fourc' extra, e.g. `python -m pip install \".[fourc]\"`, "
-        "or use a Pixi environment with the fourc feature such as `queens-dev` or `queens-all`."
+        "or use a Pixi environment with the fourc feature such as `dev` or `all`."
     ) from exc
 
 

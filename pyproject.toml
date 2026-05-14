@@ -271,8 +271,8 @@ fourcipp = ">=1.91.0"
 
 [tool.pixi.environments]
 default = { features = ["base"], no-default-feature = true, solve-group = "default"}
-queens-all = { features = ["base","tutorials", "fourc"], no-default-feature = true, solve-group = "default"}
-queens-dev = { features = ["base", "dev", "tutorials", "fourc"], no-default-feature = true, solve-group = "default"}
+all = { features = ["base","tutorials", "fourc"], no-default-feature = true, solve-group = "default"}
+dev = { features = ["base", "dev", "tutorials", "fourc"], no-default-feature = true, solve-group = "default"}
 
 [dependency-groups]
 dev = [

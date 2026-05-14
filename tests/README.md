@@ -19,7 +19,7 @@ QUEENS is tested using [pytest](https://docs.pytest.org/en/stable/index.html). F
 development, run tests through the Pixi development environment, for example:
 
 ```bash
-pixi run -e queens-dev pytest
+pixi run -e dev pytest
 ```
 
 For a comprehensive list of pytest commands, see [here](https://docs.pytest.org/en/stable/how-to/usage.html). Some additional useful commands to test QUEENS are listed in the following:

@@ -37,8 +37,8 @@ jobs:
         with:
           cache: true
           cache-write: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
-          environments: queens-dev
-          activate-environment: queens-dev
+          environments: dev
+          activate-environment: dev
       - name: Run pytest for unit tests and integration tests
         env:
           COVERAGE_FILE: .coverage.core.${{ runner.os }}
@@ -90,8 +90,8 @@ jobs:
         with:
           cache: true
           cache-write: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
-          environments: queens-dev
-          activate-environment: queens-dev
+          environments: dev
+          activate-environment: dev
       - name: Run pytest for tutorial tests
         env:
           COVERAGE_FILE: .coverage.tutorials.${{ runner.os }}
@@ -140,8 +140,8 @@ jobs:
         with:
           cache: true
           cache-write: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
-          environments: queens-dev
-          activate-environment: queens-dev
+          environments: dev
+          activate-environment: dev
       - name: Create links to 4C
         run: |
           ln -s /home/user/4C/bin/ config/4C_build
@@ -193,8 +193,8 @@ jobs:
         with:
           cache: true
           cache-write: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
-          environments: queens-dev
-          activate-environment: queens-dev
+          environments: dev
+          activate-environment: dev
       - name: Create links to 4C
         run: |
           ln -s /home/user/4C/bin/ config/4C_build
@@ -249,8 +249,8 @@ jobs:
         with:
           cache: true
           cache-write: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
-          environments: queens-dev
-          activate-environment: queens-dev
+          environments: dev
+          activate-environment: dev
           ensure-rsync: false
       - name: Download raw core test reports from Ubuntu
         uses: actions/download-artifact@v8
@@ -293,14 +293,14 @@ jobs:
             reports/tutorials-fourc-ubuntu/.coverage.tutorials_fourc.Linux \
             .coverage.tutorials_fourc.Linux
 
-          pixi run --locked -e queens-dev coverage combine \
+          pixi run --locked -e dev coverage combine \
             .coverage.core.Linux \
             .coverage.tutorials.Linux \
             .coverage.fourc.Linux \
             .coverage.tutorials_fourc.Linux
-          pixi run --locked -e queens-dev coverage html -d html_coverage_report
-          pixi run --locked -e queens-dev coverage xml -o xml_coverage_report.xml
-          pixi run --locked -e queens-dev coverage report
+          pixi run --locked -e dev coverage html -d html_coverage_report
+          pixi run --locked -e dev coverage xml -o xml_coverage_report.xml
+          pixi run --locked -e dev coverage report
 
           python .github/xml_summaries_to_md.py \
             xml_coverage_report.xml \

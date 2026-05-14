@@ -12,12 +12,12 @@ In order to create random material fields in combination with 4C, QUEENS require
 python -m pip install ".[fourc]"
 ```
 
-For Pixi project-based workflow, use the `queens-all` environment
+For Pixi project-based workflow, use the `all` environment
 that includes the 4C interface dependencies without development tools:
 ```bash
-pixi install --environment queens-all
-pixi run -e queens-all install-editable
+pixi install --environment all
+pixi run -e all install-editable
 ```
-For development, use the `queens-dev` Pixi environment that includes the `fourc` feature.
+For development, use the `dev` Pixi environment that includes the `fourc` feature.
 
 For more setup details, see the top-level [README.md](https://github.com/queens-py/queens/blob/main/README.md).

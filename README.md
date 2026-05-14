@@ -76,23 +76,23 @@ After cloning the repository, installing with Pixi is as easy as:
 pixi install
 pixi run install-editable
 ```
-The default Pixi environment contains the core QUEENS dependencies. Use `queens-all` for runtime
+The default Pixi environment contains the core QUEENS dependencies. Use `all` for runtime
 extras without development tools. For named Pixi environments, run
 `pixi run -e <environment> install-editable` once for each environment you want to use.
 
 ### Development installation
-For development, we recommend using [Pixi](https://pixi.sh/latest/) together with the `queens-dev` environment.
-`queens-dev` contains the full contributor setup, including development tools, tutorials, and the
+For development, we recommend using [Pixi](https://pixi.sh/latest/) together with the `dev` environment.
+`dev` contains the full contributor setup, including development tools, tutorials, and the
 4C interface dependencies.
 Clone the repository and install with:
 ```bash
-pixi install --environment queens-dev
-pixi run -e queens-dev install-editable
+pixi install --environment dev
+pixi run -e dev install-editable
 ```
 Useful development commands then look like:
 ```bash
-pixi run -e queens-dev pytest
-pixi run -e queens-dev pre-commit run --all-files
+pixi run -e dev pytest
+pixi run -e dev pre-commit run --all-files
 ```
 <!---installation marker, do not remove this comment-->
 

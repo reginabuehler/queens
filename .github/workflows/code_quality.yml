@@ -31,9 +31,9 @@ jobs:
           cache-write: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
           environments: >-
             default
-            queens-all
-            queens-dev
-          activate-environment: queens-dev
+            all
+            dev
+          activate-environment: dev
           ensure-rsync: false
       - name: Check dependency declaration integrity
         run: |
@@ -162,7 +162,7 @@ jobs:
           set -euo pipefail
 
           echo "::group::Check compatibility with licenses of dependencies..."
-          pip-licenses --python=.pixi/envs/queens-all/bin/python
+          pip-licenses --python=.pixi/envs/all/bin/python
           echo "::endgroup::"
 
       - name: Create licenserc

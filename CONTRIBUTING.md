@@ -49,8 +49,8 @@ Install QUEENS as described in the [README.md](https://github.com/queens-py/quee
 For contributions, use the Pixi development environment and expose your local clone inside it:
 <!---installation_develop marker, do not remove this comment-->
 ```bash
-pixi install --environment queens-dev
-pixi run -e queens-dev install-editable
+pixi install --environment dev
+pixi run -e dev install-editable
 ```
 <!---installation_develop marker, do not remove this comment-->
 
@@ -103,7 +103,7 @@ sync:
 After editing `pyproject.toml`, run the dependency integrity check. The same check is installed as a
 pre-commit hook and also runs in CI:
 ```bash
-pixi run -e queens-dev pre-commit run check-pyproject-dependency-integrity --files pyproject.toml
+pixi run -e dev pre-commit run check-pyproject-dependency-integrity --files pyproject.toml
 ```
 
 If dependency declarations changed, refresh the lockfile and commit it together with
@@ -122,9 +122,9 @@ pixi lock --check --dry-run
 
 Finally, reinstall or update the affected Pixi environment and run a focused test or smoke check:
 ```bash
-pixi install --environment queens-dev
-pixi run -e queens-dev install-editable
-pixi run -e queens-dev pytest
+pixi install --environment dev
+pixi run -e dev install-editable
+pixi run -e dev pytest
 ```
 
 ##### Commit messages

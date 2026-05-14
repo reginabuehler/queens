@@ -330,7 +330,7 @@ class RemoteConnection(Connection):
 
     def build_remote_environment(
         self,
-        pixi_environment: str = "queens-all",
+        pixi_environment: str = "all",
     ) -> None:
         """Build the remote QUEENS pixi environment.
 

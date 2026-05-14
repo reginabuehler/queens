@@ -926,7 +926,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/39/1f/54ddd9171840bbf2437287ffab18268d7ccbca7752a7f290252ddabbcef8/numpysane-0.42.tar.gz
       - pypi: git+https://github.com/nchopin/particles.git#f71e94a21a11c73b58e2d694775b1b1d379b8854
       - pypi: https://files.pythonhosted.org/packages/4a/49/bb935b2e68cf31e2b2face9d0841ac97447b6d0387d0c2d2255c7a2867da/scikit_activeml-1.0.0-py3-none-any.whl
-  queens-all:
+  all:
     channels:
     - url: https://conda.anaconda.org/conda-forge/
     - url: https://conda.anaconda.org/nodefaults/
@@ -1878,7 +1878,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/90/d6/42d441eeceac1d8fc7d2a7480654db661282dd1f94deef344c5421ba0c3c/rapidyaml-0.12.1-cp312-cp312-macosx_11_0_arm64.whl
       - pypi: https://files.pythonhosted.org/packages/54/4b/ee27938d1b2c443e89a9a10e00d2d19aa5ee300cd3d61140644e93bb083e/regex-2026.5.9-cp312-cp312-macosx_11_0_arm64.whl
       - pypi: https://files.pythonhosted.org/packages/4a/49/bb935b2e68cf31e2b2face9d0841ac97447b6d0387d0c2d2255c7a2867da/scikit_activeml-1.0.0-py3-none-any.whl
-  queens-dev:
+  dev:
     channels:
     - url: https://conda.anaconda.org/conda-forge/
     - url: https://conda.anaconda.org/nodefaults/

@@ -45,7 +45,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--pixi-environment",
         type=str,
-        default="queens-all",
+        default="all",
         help="pixi workspace environment to install on the remote host",
     )
 
