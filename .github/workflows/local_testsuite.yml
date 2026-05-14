@@ -293,14 +293,14 @@ jobs:
             reports/tutorials-fourc-ubuntu/.coverage.tutorials_fourc.Linux \
             .coverage.tutorials_fourc.Linux
 
-          pixi run --locked -e dev coverage combine \
+          coverage combine \
             .coverage.core.Linux \
             .coverage.tutorials.Linux \
             .coverage.fourc.Linux \
             .coverage.tutorials_fourc.Linux
-          pixi run --locked -e dev coverage html -d html_coverage_report
-          pixi run --locked -e dev coverage xml -o xml_coverage_report.xml
-          pixi run --locked -e dev coverage report
+          coverage html -d html_coverage_report
+          coverage xml -o xml_coverage_report.xml
+          coverage report
 
           python .github/xml_summaries_to_md.py \
             xml_coverage_report.xml \
