@@ -18,7 +18,7 @@ env:
 
 jobs:
   run_code_checks:
-    name: code checks
+    name: Check code quality
     runs-on: ubuntu-latest
     defaults:
       run:
