@@ -46,8 +46,7 @@ class GaussianNeuralNetwork(Surrogate):
     Attributes:
         nn_model (tf.model):  Tensorflow based Bayesian neural network model
         num_epochs (int): Number of training epochs for variational optimization
-        seed (int): Random seed used for initialization of stochastic gradient decent
-                              optimizer
+        seed (int): Seed for pseudo-random number generation
         verbosity_on (bool): Boolean for model verbosity during training. True=verbose
         batch_size (int): Size of data-batch (smaller than the training data size)
         scaler_x (obj): Scaler for inputs
