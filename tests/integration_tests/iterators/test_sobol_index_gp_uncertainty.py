@@ -357,8 +357,5 @@ def test_sobol_index_gp_uncertainty_mean_ishigami(global_settings):
         ]
     )
 
-    print(results["first_order"].values)
-    print(results["total_order"].values)
-
     np.testing.assert_allclose(results["first_order"].values, expected_s1, atol=1e-05)
     np.testing.assert_allclose(results["total_order"].values, expected_st, atol=1e-05)
