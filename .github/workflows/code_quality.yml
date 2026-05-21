@@ -161,21 +161,19 @@ jobs:
         run: |
           set -euo pipefail
 
-          echo "::group::Check compatibility with licenses of dependencies..."
           pip-licenses --python=.pixi/envs/all/bin/python
-          echo "::endgroup::"
 
-      - name: Create licenserc
+      - name: Create a licenserc file
         run: |
           set -euo pipefail
 
-          echo "::group::Create an rc file for the license header check..."
           python .gitlab/pipeline_utils/create_licenserc.py \
             --template_file ".gitlab/pipeline_utils/.licenserc_template.yaml" \
             --text_file "license_header.tmpl" \
             --output_file ".licenserc.yaml" \
             --placeholder "license_header"
-          echo "::endgroup::"
+
+          echo "Created an rc file for the license header check."
 
       - name: Check license headers
         uses: apache/skywalking-eyes/header@v0.8.0
@@ -187,50 +185,39 @@ jobs:
         run: |
           set -euo pipefail
 
-          echo "::group::Run isort..."
           isort --check-only src/* tests
-          echo "::endgroup::"
 
       - name: Run black
         run: |
           set -euo pipefail
 
-          echo "::group::Run black..."
           black --check src/* tests
-          echo "::endgroup::"
 
       - name: Run pylint
         run: |
           set -euo pipefail
 
-          echo "::group::Run pylint on src..."
+          echo "Run pylint on src:"
           pylint --rcfile=.pylintrc --ignore=integration_tests src/ tests/
-          echo "::endgroup::"
 
-          echo "::group::Run pylint on integration tests..."
+          echo
+          echo "Run pylint on integration tests:"
           pylint --rcfile=.pylintrc --disable=duplicate-code tests/integration_tests/
-          echo "::endgroup::"
 
       - name: Run ruff
         run: |
           set -euo pipefail
 
-          echo "::group::Run ruff..."
           ruff check
-          echo "::endgroup::"
 
       - name: Run nbstripout
         run: |
           set -euo pipefail
 
-          echo "::group::Run nbstripout..."
           find . -path './.pixi' -prune -o -name '*.ipynb' -exec nbstripout --verify {} +
-          echo "::endgroup::"
 
       - name: Run mypy
         run: |
           set -euo pipefail
 
-          echo "::group::Check type hinting with mypy..."
           mypy .
-          echo "::endgroup::"
