@@ -229,7 +229,7 @@ def collapsible(full_text, summary):
     Returns:
         str: collapse section
     """
-    return f"<details>\n<summary>{summary}</summary>\n\n{full_text}\n\n</details>" ""
+    return f"<details>\n<summary>{summary}</summary>\n\n{full_text}\n\n</details>"
 
 
 def collapsable(full_text, summary):
