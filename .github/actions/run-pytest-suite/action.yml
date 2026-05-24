@@ -1,9 +1,9 @@
 name: Run pytest suite
-description: Run a marked pytest suite with coverage and a JUnit report.
+description: Run a marked pytest suite and publish its reports.
 
 inputs:
-  name:
-    description: Suite name used in coverage and JUnit filenames.
+  test-suite-name:
+    description: Test suite name used in coverage, JUnit, and artifact filenames.
     required: true
   markers:
     description: Pytest marker expression to select tests.
@@ -12,16 +12,28 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Run pytest
+    - name: Prepare report names
+      id: report-names
       shell: bash
       env:
-        PYTEST_MARKERS: ${{ inputs.markers }}
-        TEST_SUITE_NAME: ${{ inputs.name }}
+        TEST_SUITE_NAME: ${{ inputs.test-suite-name }}
       run: |
         set -euo pipefail
 
-        export COVERAGE_FILE=".coverage.${TEST_SUITE_NAME}"
-        junit_file="test_junit_${TEST_SUITE_NAME}.xml"
+        echo "coverage-file=.coverage.${TEST_SUITE_NAME}" >> "$GITHUB_OUTPUT"
+        echo "junit-file=test_junit_${TEST_SUITE_NAME}.xml" >> "$GITHUB_OUTPUT"
+        echo "artifact-name=raw_test_reports_${TEST_SUITE_NAME}" >> "$GITHUB_OUTPUT"
+
+    - name: Run pytest
+      id: pytest
+      shell: bash
+      continue-on-error: true
+      env:
+        COVERAGE_FILE: ${{ steps.report-names.outputs.coverage-file }}
+        JUNIT_FILE: ${{ steps.report-names.outputs.junit-file }}
+        PYTEST_MARKERS: ${{ inputs.markers }}
+      run: |
+        set -euo pipefail
 
         pytest_args=(
           -v
@@ -30,7 +42,7 @@ runs:
           --cov-report=term
           --color=yes
           -o junit_logging=all
-          --junitxml="${junit_file}"
+          --junitxml="${JUNIT_FILE}"
         )
 
         if [ -n "${TEST_TIMING_OPTION:-}" ]; then
@@ -39,3 +51,28 @@ runs:
         fi
 
         pytest "${pytest_args[@]}"
+
+    - name: Publish junit pytest report
+      if: always()
+      uses: mikepenz/action-junit-report@v6
+      with:
+        report_paths: ${{ steps.report-names.outputs.junit-file }}
+        annotate_only: true
+        job_summary: false
+
+    - name: Upload raw test reports
+      if: always()
+      uses: actions/upload-artifact@v7
+      with:
+        name: ${{ steps.report-names.outputs.artifact-name }}
+        include-hidden-files: true
+        path: |
+          ${{ steps.report-names.outputs.coverage-file }}
+          ${{ steps.report-names.outputs.junit-file }}
+        if-no-files-found: error
+        retention-days: 7
+
+    - name: Fail if pytest failed
+      if: steps.pytest.outcome == 'failure'
+      shell: bash
+      run: exit 1

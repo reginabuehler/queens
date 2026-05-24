@@ -40,26 +40,8 @@ jobs:
       - name: Run pytest for unit tests and integration tests
         uses: ./.github/actions/run-pytest-suite
         with:
-          name: core.${{ runner.os }}
+          test-suite-name: core.${{ runner.os }}
           markers: "unit_tests or integration_tests"
-      - name: Publish junit pytest report
-        if: success() || failure()
-        uses: mikepenz/action-junit-report@v6
-        with:
-          report_paths: "test_junit_*.xml"
-          annotate_only: true
-          job_summary: false
-      - name: Upload raw core test reports
-        if: success() || failure()
-        uses: actions/upload-artifact@v7
-        with:
-          name: raw-test-reports-core-${{ runner.os }}
-          include-hidden-files: true
-          path: |
-            .coverage.core.${{ runner.os }}
-            test_junit_core.${{ runner.os }}.xml
-          if-no-files-found: error
-          retention-days: 7
 
   run_tests_tutorials:
     name: tutorial tests (${{ matrix.os }})
@@ -84,26 +66,8 @@ jobs:
       - name: Run pytest for tutorial tests
         uses: ./.github/actions/run-pytest-suite
         with:
-          name: tutorials.${{ runner.os }}
+          test-suite-name: tutorials.${{ runner.os }}
           markers: tutorial_tests
-      - name: Publish junit pytest report
-        if: success() || failure()
-        uses: mikepenz/action-junit-report@v6
-        with:
-          report_paths: "test_junit_*.xml"
-          annotate_only: true
-          job_summary: false
-      - name: Upload raw tutorial test reports
-        if: success() || failure()
-        uses: actions/upload-artifact@v7
-        with:
-          name: raw-test-reports-tutorials-${{ runner.os }}
-          include-hidden-files: true
-          path: |
-            .coverage.tutorials.${{ runner.os }}
-            test_junit_tutorials.${{ runner.os }}.xml
-          if-no-files-found: error
-          retention-days: 7
 
   run_tests_fourc:
     name: 4C integration tests (ubuntu-latest)
@@ -128,26 +92,8 @@ jobs:
       - name: Run pytest for 4C integration tests
         uses: ./.github/actions/run-pytest-suite
         with:
-          name: fourc.${{ runner.os }}
+          test-suite-name: fourc.${{ runner.os }}
           markers: integration_tests_fourc
-      - name: Publish junit pytest report
-        if: success() || failure()
-        uses: mikepenz/action-junit-report@v6
-        with:
-          report_paths: "test_junit_*.xml"
-          annotate_only: true
-          job_summary: false
-      - name: Upload raw 4C test reports
-        if: success() || failure()
-        uses: actions/upload-artifact@v7
-        with:
-          name: raw-test-reports-fourc-${{ runner.os }}
-          include-hidden-files: true
-          path: |
-            .coverage.fourc.${{ runner.os }}
-            test_junit_fourc.${{ runner.os }}.xml
-          if-no-files-found: error
-          retention-days: 7
 
   run_tests_tutorials_fourc:
     name: 4C tutorial tests (ubuntu-latest)
@@ -172,26 +118,8 @@ jobs:
       - name: Run pytest for 4C tutorial tests
         uses: ./.github/actions/run-pytest-suite
         with:
-          name: tutorials_fourc.${{ runner.os }}
+          test-suite-name: tutorials_fourc.${{ runner.os }}
           markers: tutorial_tests_fourc
-      - name: Publish junit pytest report
-        if: success() || failure()
-        uses: mikepenz/action-junit-report@v6
-        with:
-          report_paths: "test_junit_*.xml"
-          annotate_only: true
-          job_summary: false
-      - name: Upload raw 4C tutorial test reports
-        if: success() || failure()
-        uses: actions/upload-artifact@v7
-        with:
-          name: raw-test-reports-tutorials-fourc-${{ runner.os }}
-          include-hidden-files: true
-          path: |
-            .coverage.tutorials_fourc.${{ runner.os }}
-            test_junit_tutorials_fourc.${{ runner.os }}.xml
-          if-no-files-found: error
-          retention-days: 7
 
   report_test_results:
     name: report test results
@@ -217,32 +145,32 @@ jobs:
       - name: Download raw core test reports from Ubuntu
         uses: actions/download-artifact@v8
         with:
-          name: raw-test-reports-core-Linux
+          name: raw_test_reports_core.Linux
           path: reports/core-ubuntu
       - name: Download raw core test reports from macOS
         uses: actions/download-artifact@v8
         with:
-          name: raw-test-reports-core-macOS
+          name: raw_test_reports_core.macOS
           path: reports/core-macos
       - name: Download raw tutorial test reports from Ubuntu
         uses: actions/download-artifact@v8
         with:
-          name: raw-test-reports-tutorials-Linux
+          name: raw_test_reports_tutorials.Linux
           path: reports/tutorials-ubuntu
       - name: Download raw tutorial test reports from macOS
         uses: actions/download-artifact@v8
         with:
-          name: raw-test-reports-tutorials-macOS
+          name: raw_test_reports_tutorials.macOS
           path: reports/tutorials-macos
       - name: Download raw 4C test reports
         uses: actions/download-artifact@v8
         with:
-          name: raw-test-reports-fourc-Linux
+          name: raw_test_reports_fourc.Linux
           path: reports/fourc-ubuntu
       - name: Download raw 4C tutorial test reports
         uses: actions/download-artifact@v8
         with:
-          name: raw-test-reports-tutorials-fourc-Linux
+          name: raw_test_reports_tutorials_fourc.Linux
           path: reports/tutorials-fourc-ubuntu
       - name: Combine Ubuntu coverage data and build reports
         run: |
