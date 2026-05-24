@@ -25,9 +25,7 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            pytest_markers: "unit_tests or integration_tests"
           - os: macos-latest
-            pytest_markers: "unit_tests or integration_tests"
     defaults:
       run:
         shell: bash -l {0}
@@ -40,19 +38,10 @@ jobs:
           environments: dev
           activate-environment: dev
       - name: Run pytest for unit tests and integration tests
-        env:
-          COVERAGE_FILE: .coverage.core.${{ runner.os }}
-        run: |
-          set -euo pipefail
-
-          pytest -v \
-            -m "${{ matrix.pytest_markers }}" \
-            --cov \
-            --cov-report=term \
-            $TEST_TIMING_OPTION \
-            --color=yes \
-            -o junit_logging=all \
-            --junitxml="test_junit_core_${{ runner.os }}.xml"
+        uses: ./.github/actions/run-pytest-suite
+        with:
+          name: core.${{ runner.os }}
+          markers: "unit_tests or integration_tests"
       - name: Publish junit pytest report
         if: success() || failure()
         uses: mikepenz/action-junit-report@v6
@@ -68,7 +57,7 @@ jobs:
           include-hidden-files: true
           path: |
             .coverage.core.${{ runner.os }}
-            test_junit_core_${{ runner.os }}.xml
+            test_junit_core.${{ runner.os }}.xml
           if-no-files-found: error
           retention-days: 7
 
@@ -93,19 +82,10 @@ jobs:
           environments: dev
           activate-environment: dev
       - name: Run pytest for tutorial tests
-        env:
-          COVERAGE_FILE: .coverage.tutorials.${{ runner.os }}
-        run: |
-          set -euo pipefail
-
-          pytest -v \
-            -m "tutorial_tests" \
-            --cov \
-            --cov-report=term \
-            $TEST_TIMING_OPTION \
-            --color=yes \
-            -o junit_logging=all \
-            --junitxml="test_junit_tutorials_${{ runner.os }}.xml"
+        uses: ./.github/actions/run-pytest-suite
+        with:
+          name: tutorials.${{ runner.os }}
+          markers: tutorial_tests
       - name: Publish junit pytest report
         if: success() || failure()
         uses: mikepenz/action-junit-report@v6
@@ -121,7 +101,7 @@ jobs:
           include-hidden-files: true
           path: |
             .coverage.tutorials.${{ runner.os }}
-            test_junit_tutorials_${{ runner.os }}.xml
+            test_junit_tutorials.${{ runner.os }}.xml
           if-no-files-found: error
           retention-days: 7
 
@@ -146,19 +126,10 @@ jobs:
         run: |
           ln -s /home/user/4C/bin/ config/4C_build
       - name: Run pytest for 4C integration tests
-        env:
-          COVERAGE_FILE: .coverage.fourc.${{ runner.os }}
-        run: |
-          set -euo pipefail
-
-          pytest -v \
-            -m "integration_tests_fourc" \
-            --cov \
-            --cov-report=term \
-            $TEST_TIMING_OPTION \
-            --color=yes \
-            -o junit_logging=all \
-            --junitxml="test_junit_fourc_${{ runner.os }}.xml"
+        uses: ./.github/actions/run-pytest-suite
+        with:
+          name: fourc.${{ runner.os }}
+          markers: integration_tests_fourc
       - name: Publish junit pytest report
         if: success() || failure()
         uses: mikepenz/action-junit-report@v6
@@ -174,7 +145,7 @@ jobs:
           include-hidden-files: true
           path: |
             .coverage.fourc.${{ runner.os }}
-            test_junit_fourc_${{ runner.os }}.xml
+            test_junit_fourc.${{ runner.os }}.xml
           if-no-files-found: error
           retention-days: 7
 
@@ -199,19 +170,10 @@ jobs:
         run: |
           ln -s /home/user/4C/bin/ config/4C_build
       - name: Run pytest for 4C tutorial tests
-        env:
-          COVERAGE_FILE: .coverage.tutorials_fourc.${{ runner.os }}
-        run: |
-          set -euo pipefail
-
-          pytest -v \
-            -m "tutorial_tests_fourc" \
-            --cov \
-            --cov-report=term \
-            $TEST_TIMING_OPTION \
-            --color=yes \
-            -o junit_logging=all \
-            --junitxml="test_junit_tutorials_fourc_${{ runner.os }}.xml"
+        uses: ./.github/actions/run-pytest-suite
+        with:
+          name: tutorials_fourc.${{ runner.os }}
+          markers: tutorial_tests_fourc
       - name: Publish junit pytest report
         if: success() || failure()
         uses: mikepenz/action-junit-report@v6
@@ -227,7 +189,7 @@ jobs:
           include-hidden-files: true
           path: |
             .coverage.tutorials_fourc.${{ runner.os }}
-            test_junit_tutorials_fourc_${{ runner.os }}.xml
+            test_junit_tutorials_fourc.${{ runner.os }}.xml
           if-no-files-found: error
           retention-days: 7
 
@@ -304,12 +266,12 @@ jobs:
 
           python .github/xml_summaries_to_md.py \
             xml_coverage_report.xml \
-            reports/core-ubuntu/test_junit_core_Linux.xml \
-            reports/core-macos/test_junit_core_macOS.xml \
-            reports/tutorials-ubuntu/test_junit_tutorials_Linux.xml \
-            reports/tutorials-macos/test_junit_tutorials_macOS.xml \
-            reports/fourc-ubuntu/test_junit_fourc_Linux.xml \
-            reports/tutorials-fourc-ubuntu/test_junit_tutorials_fourc_Linux.xml \
+            reports/core-ubuntu/test_junit_core.Linux.xml \
+            reports/core-macos/test_junit_core.macOS.xml \
+            reports/tutorials-ubuntu/test_junit_tutorials.Linux.xml \
+            reports/tutorials-macos/test_junit_tutorials.macOS.xml \
+            reports/fourc-ubuntu/test_junit_fourc.Linux.xml \
+            reports/tutorials-fourc-ubuntu/test_junit_tutorials_fourc.Linux.xml \
             >> "$GITHUB_STEP_SUMMARY"
       - name: Upload combined coverage report
         uses: actions/upload-pages-artifact@v5

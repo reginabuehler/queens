@@ -1,0 +1,41 @@
+name: Run pytest suite
+description: Run a marked pytest suite with coverage and a JUnit report.
+
+inputs:
+  name:
+    description: Suite name used in coverage and JUnit filenames.
+    required: true
+  markers:
+    description: Pytest marker expression to select tests.
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Run pytest
+      shell: bash
+      env:
+        PYTEST_MARKERS: ${{ inputs.markers }}
+        TEST_SUITE_NAME: ${{ inputs.name }}
+      run: |
+        set -euo pipefail
+
+        export COVERAGE_FILE=".coverage.${TEST_SUITE_NAME}"
+        junit_file="test_junit_${TEST_SUITE_NAME}.xml"
+
+        pytest_args=(
+          -v
+          -m "${PYTEST_MARKERS}"
+          --cov
+          --cov-report=term
+          --color=yes
+          -o junit_logging=all
+          --junitxml="${junit_file}"
+        )
+
+        if [ -n "${TEST_TIMING_OPTION:-}" ]; then
+          read -r -a timing_args <<< "${TEST_TIMING_OPTION}"
+          pytest_args+=("${timing_args[@]}")
+        fi
+
+        pytest "${pytest_args[@]}"
