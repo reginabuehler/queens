@@ -20,7 +20,7 @@ def inject_notebook_execution_context(tb, notebook_dir):
 
     Args:
         tb (testbook): testbook object for inserting code into the notebook
-        notebook_dir (str | Path): Directory conainting the notebook
+        notebook_dir (str | Path): Directory containing the notebook
 
     Returns:
         None
