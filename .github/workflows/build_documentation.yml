@@ -21,7 +21,7 @@ jobs:
       options: --user root --env OMPI_ALLOW_RUN_AS_ROOT=1 --env OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1
     defaults:
       run:
-        shell: bash -l {0}
+        shell: bash -l -euo pipefail {0}
     steps:
       - uses: actions/checkout@v6
       - uses: ./.github/actions/setup-queens-pixi
@@ -44,7 +44,7 @@ jobs:
         env:
           PYTHONPATH: ${{ github.workspace }}
         run: |
-          set -euxo pipefail
+          set -x
           sphinx-apidoc -o doc/source src/ -fMT
           cd doc
           xvfb-run -a sphinx-build -b html -d build/doctrees source build/html -W

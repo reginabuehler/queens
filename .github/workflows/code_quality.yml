@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        shell: bash -l {0}
+        shell: bash -l -euo pipefail {0}
     steps:
       - uses: actions/checkout@v6
       - uses: ./.github/actions/setup-queens-pixi
@@ -37,7 +37,6 @@ jobs:
           ensure-rsync: false
       - name: Check dependency declaration integrity
         run: |
-          set -euo pipefail
           # Validate that the PEP-style dependency declarations in pyproject.toml
           # stay aligned with the pixi dependency sections.
           python3 tools/dependencies/check_pyproject_dependency_integrity.py \
@@ -46,8 +45,6 @@ jobs:
       - name: Check pixi environment integrity
         id: environment_integrity
         run: |
-          set -euo pipefail
-
           base_ref="main"
           pyproject_diff_file="$(mktemp)"
           git fetch --no-tags --depth=1 origin "${base_ref}"
@@ -159,14 +156,10 @@ jobs:
 
       - name: Check compatibility of licenses of dependencies
         run: |
-          set -euo pipefail
-
           pip-licenses --python=.pixi/envs/all/bin/python
 
       - name: Create a licenserc file
         run: |
-          set -euo pipefail
-
           python .gitlab/pipeline_utils/create_licenserc.py \
             --template_file ".gitlab/pipeline_utils/.licenserc_template.yaml" \
             --text_file "license_header.tmpl" \
@@ -183,20 +176,14 @@ jobs:
 
       - name: Run isort
         run: |
-          set -euo pipefail
-
           isort --check-only src/* tests
 
       - name: Run black
         run: |
-          set -euo pipefail
-
           black --check src/* tests
 
       - name: Run pylint
         run: |
-          set -euo pipefail
-
           echo "Run pylint on src:"
           pylint --rcfile=.pylintrc --ignore=integration_tests src/ tests/
 
@@ -206,18 +193,12 @@ jobs:
 
       - name: Run ruff
         run: |
-          set -euo pipefail
-
           ruff check
 
       - name: Run nbstripout
         run: |
-          set -euo pipefail
-
           find . -path './.pixi' -prune -o -name '*.ipynb' -exec nbstripout --verify {} +
 
       - name: Run mypy
         run: |
-          set -euo pipefail
-
           mypy .

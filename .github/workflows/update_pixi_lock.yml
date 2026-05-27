@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        shell: bash -l {0}
+        shell: bash -l -euo pipefail {0}
     steps:
       - uses: actions/checkout@v6
       - name: Set up Pixi
@@ -26,8 +26,6 @@ jobs:
           ensure-rsync: false
       - name: Update Pixi lockfile
         run: |
-          set -euo pipefail
-
           pixi update --json | pixi exec pixi-diff-to-markdown > pixi_lock_update.md
       - name: Create pull request
         uses: peter-evans/create-pull-request@v8
