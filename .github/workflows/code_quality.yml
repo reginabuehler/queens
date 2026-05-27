@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        shell: bash -l -euo pipefail {0}
+        shell: bash
     steps:
       - uses: actions/checkout@v6
       - uses: ./.github/actions/setup-queens-pixi

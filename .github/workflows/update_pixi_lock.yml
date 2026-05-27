@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        shell: bash -euo pipefail {0}
+        shell: bash
     steps:
       - uses: actions/checkout@v6
       - name: Set up Pixi

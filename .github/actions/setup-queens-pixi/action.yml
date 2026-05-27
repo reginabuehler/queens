@@ -50,21 +50,17 @@ runs:
       if: ${{ inputs.install-editable != 'false' }}
       shell: bash
       run: |
-        set -euo pipefail
         pixi run --locked -e "${{ inputs.activate-environment }}" install-editable
 
     - name: Mark repo as safe for git
       shell: bash
       run: |
-        set -euo pipefail
         git config --global --add safe.directory "${GITHUB_WORKSPACE}"
 
     - name: Ensure rsync is available
       if: ${{ inputs.ensure-rsync != 'false' }}
       shell: bash
       run: |
-        set -euo pipefail
-
         if command -v rsync >/dev/null 2>&1; then
           rsync --version
         elif [ "${RUNNER_OS}" = "Linux" ]; then

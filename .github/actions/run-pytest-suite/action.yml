@@ -14,7 +14,7 @@ runs:
   steps:
     - name: Prepare report names
       id: report-names
-      shell: bash -eo pipefail {0}
+      shell: bash
       env:
         TEST_SUITE_NAME: ${{ inputs.test-suite-name }}
       run: |
@@ -24,7 +24,7 @@ runs:
 
     - name: Run pytest
       id: pytest
-      shell: bash -eo pipefail {0}
+      shell: bash
       continue-on-error: true
       env:
         COVERAGE_FILE: ${{ steps.report-names.outputs.coverage-file }}

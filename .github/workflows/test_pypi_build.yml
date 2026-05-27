@@ -45,7 +45,7 @@ jobs:
             requiredness: optional
     defaults:
       run:
-        shell: bash -l -euo pipefail {0}
+        shell: bash
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-python@v6

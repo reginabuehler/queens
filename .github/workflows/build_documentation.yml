@@ -21,7 +21,7 @@ jobs:
       options: --user root --env OMPI_ALLOW_RUN_AS_ROOT=1 --env OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1
     defaults:
       run:
-        shell: bash -l -euo pipefail {0}
+        shell: bash -l -eo pipefail {0}
     steps:
       - uses: actions/checkout@v6
       - uses: ./.github/actions/setup-queens-pixi
