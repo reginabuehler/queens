@@ -30,7 +30,6 @@ jobs:
           cache: true
           cache-write: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
           environments: >-
-            default
             all
             dev
           activate-environment: dev
