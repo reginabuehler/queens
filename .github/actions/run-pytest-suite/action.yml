@@ -14,27 +14,23 @@ runs:
   steps:
     - name: Prepare report names
       id: report-names
-      shell: bash
+      shell: bash -eo pipefail {0}
       env:
         TEST_SUITE_NAME: ${{ inputs.test-suite-name }}
       run: |
-        set -euo pipefail
-
         echo "coverage-file=.coverage.${TEST_SUITE_NAME}" >> "$GITHUB_OUTPUT"
         echo "junit-file=test_junit_${TEST_SUITE_NAME}.xml" >> "$GITHUB_OUTPUT"
         echo "artifact-name=raw_test_reports_${TEST_SUITE_NAME}" >> "$GITHUB_OUTPUT"
 
     - name: Run pytest
       id: pytest
-      shell: bash
+      shell: bash -eo pipefail {0}
       continue-on-error: true
       env:
         COVERAGE_FILE: ${{ steps.report-names.outputs.coverage-file }}
         JUNIT_FILE: ${{ steps.report-names.outputs.junit-file }}
         PYTEST_MARKERS: ${{ inputs.markers }}
       run: |
-        set -euo pipefail
-
         pytest_args=(
           -v
           -m "${PYTEST_MARKERS}"
