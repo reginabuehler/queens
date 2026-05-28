@@ -120,7 +120,7 @@ markers = [
 ]
 
 [tool.coverage.run]
-source = ["queens"]
+source = ["src"]
 parallel = true
 branch = true
 relative_files = true
