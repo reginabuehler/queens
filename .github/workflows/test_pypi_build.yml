@@ -68,8 +68,6 @@ jobs:
           source .venv-pypi-smoke/bin/activate
           python -c "import queens"
           pytest -v -m "unit_tests" \
-            # test fails due to path errors in this setup
             --ignore=tests/unit_tests/utils/test_path_utils.py \
-            # test fails due to path errors in this setup
             --ignore=tests/unit_tests/data_processors/test_txt_file.py \
             tests/unit_tests/
