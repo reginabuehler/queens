@@ -157,6 +157,12 @@ jobs:
         run: |
           pip-licenses --python=.pixi/envs/all/bin/python
 
+      - name: Run basic pre-commit checks
+        run: |
+          pre-commit run trailing-whitespace --all-files
+          pre-commit run end-of-file-fixer --all-files
+          pre-commit run check-added-large-files --all-files
+
       - name: Create a licenserc file
         run: |
           python .gitlab/pipeline_utils/create_licenserc.py \
@@ -170,6 +176,10 @@ jobs:
       - name: Check license headers
         uses: apache/skywalking-eyes/header@v0.8.0
 
+      - name: Run ruff
+        run: |
+          ruff check
+
       - name: Check conventional commit messages
         uses: webiny/action-conventional-commits@v1.4.2
 
@@ -181,6 +191,10 @@ jobs:
         run: |
           black --check src/* tests
 
+      - name: Run yamllint
+        run: |
+          yamllint -f=colored .
+
       - name: Run pylint
         run: |
           echo "Run pylint on src:"
@@ -190,18 +204,10 @@ jobs:
           echo "Run pylint on integration tests:"
           pylint --rcfile=.pylintrc --disable=duplicate-code tests/integration_tests/
 
-      - name: Run ruff
-        run: |
-          ruff check
-
-      - name: Run nbstripout
-        run: |
-          find . -path './.pixi' -prune -o -name '*.ipynb' -exec nbstripout --verify {} +
-
       - name: Run mypy
         run: |
           mypy .
 
-      - name: Run yamllint
+      - name: Run nbstripout
         run: |
-          yamllint -f=colored .
+          find . -path './.pixi' -prune -o -name '*.ipynb' -exec nbstripout --verify {} +
