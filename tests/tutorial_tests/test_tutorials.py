@@ -19,8 +19,15 @@ from pathlib import Path
 import pytest
 from testbook import testbook
 
-from test_utils.tutorial_tests import inject_mock_base_dir, inject_notebook_execution_context
-from tests.tutorial_tests.tutorial_tests_markers import ALL_TUTORIAL_NOTEBOOKS, notebook_param
+from test_utils.tutorial_tests import (
+    ALL_TUTORIAL_NOTEBOOKS,
+    _validate_tutorial_notebook_markers,
+    inject_mock_base_dir,
+    inject_notebook_execution_context,
+    notebook_param,
+)
+
+_validate_tutorial_notebook_markers()
 
 TUTORIAL_NOTEBOOKS_WITH_DEDICATED_TESTS = {
     path.stem.removeprefix("test_")

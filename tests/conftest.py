@@ -26,7 +26,7 @@ from queens.global_settings import GlobalSettings
 from queens.utils import config_directories
 from queens.utils.logger_settings import reset_logging
 from queens.utils.path import relative_path_from_root
-from tests.tutorial_tests.tutorial_tests_markers import TUTORIAL_NOTEBOOKS_BY_MARKER
+from test_utils.tutorial_tests import TUTORIAL_NOTEBOOKS_BY_MARKER
 
 _logger = logging.getLogger(__name__)
 

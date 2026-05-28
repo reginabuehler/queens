@@ -18,8 +18,7 @@ import numpy as np
 from testbook import testbook
 
 from queens.utils.path import relative_path_from_root
-from test_utils.tutorial_tests import inject_mock_base_dir
-from tests.tutorial_tests.tutorial_tests_markers import markers_for_notebook
+from test_utils.tutorial_tests import inject_mock_base_dir, markers_for_notebook
 
 NOTEBOOK_PATH = relative_path_from_root("tutorials/1_grid_iterator_rosenbrock.ipynb")
 
