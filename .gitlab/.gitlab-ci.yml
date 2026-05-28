@@ -2,6 +2,9 @@
 ---
 #---------------------------------------------------------------------------------------------------
 variables:
+  GIT_STRATEGY: clone
+  GIT_CHECKOUT: "true"
+  GIT_CLEAN_FLAGS: -ffdx
   LNM_TESTS:
     value: "1"
     description: "Run cluster tests at LNM"
