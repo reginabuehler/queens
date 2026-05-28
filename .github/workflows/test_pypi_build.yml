@@ -67,7 +67,4 @@ jobs:
         run: |
           source .venv-pypi-smoke/bin/activate
           python -c "import queens"
-          pytest -v -m "unit_tests" \
-            --ignore=tests/unit_tests/utils/test_path_utils.py \
-            --ignore=tests/unit_tests/data_processors/test_txt_file.py \
-            tests/unit_tests/
+          pytest -v -m "unit_tests" tests/unit_tests/
