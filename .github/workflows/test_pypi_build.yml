@@ -72,7 +72,4 @@ jobs:
             --ignore=tests/unit_tests/utils/test_path_utils.py \
             # test fails due to path errors in this setup
             --ignore=tests/unit_tests/data_processors/test_txt_file.py \
-            # test collection would fail due to missing testbook in the `base` and `all` envs
-            --ignore=tests/tutorial_tests \
-            # test collection would fail due to missing testbook in the `base` and `all` envs
-            --ignore=tests/integration_tests/cluster/test_cluster.py
+            tests/unit_tests/
