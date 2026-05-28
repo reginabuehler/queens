@@ -62,6 +62,7 @@ workflow:
   stage: build
   script:
     - pixi install --frozen -e "$PIXI_ENVIRONMENT"
+    - pixi run --frozen -e "$PIXI_ENVIRONMENT" install-editable
     - pixi list --frozen -e "$PIXI_ENVIRONMENT" > pipeline_pixi_environment.txt
   artifacts:
     name: "pixi_env-$CI_PIPELINE_ID.txt"
@@ -98,6 +99,7 @@ imcs-build_pixi_env:
         fi
         pixi --version
       '"
+    - pixi run --frozen -e "$PIXI_ENVIRONMENT" install-editable
     - pixi run --frozen -e "$PIXI_ENVIRONMENT" python src/queens/utils/remote_build.py
       --host=$REMOTE_ADDRESS --user=queens
       --remote-queens-repository=$REMOTE_BUILD_DIR
