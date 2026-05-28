@@ -361,7 +361,8 @@ class RemoteConnection(Connection):
             'bash -lc \'export PATH="$HOME/.pixi/bin:$PATH";'
             f" cd {self.remote_queens_repository}; "
             f"rm -rf .pixi/envs/{pixi_environment}; "
-            f"pixi install --frozen --environment {pixi_environment};'"
+            f"pixi install --locked --environment {pixi_environment}; "
+            f"pixi run --locked --environment {pixi_environment} install-editable;'"
         )
         result = self.run(command_string, echo=True, in_stream=False)
 
