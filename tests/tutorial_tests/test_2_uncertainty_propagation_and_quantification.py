@@ -17,10 +17,13 @@
 import numpy as np
 from testbook import testbook
 
+from queens.utils.path import relative_path_from_root
 from test_utils.tutorial_tests import inject_mock_base_dir
 from tests.tutorial_tests.tutorial_tests_markers import markers_for_notebook
 
-NOTEBOOK_PATH = "tutorials/2_uncertainty_propagation_and_quantification.ipynb"
+NOTEBOOK_PATH = relative_path_from_root(
+    "tutorials/2_uncertainty_propagation_and_quantification.ipynb"
+)
 
 pytestmark = markers_for_notebook(NOTEBOOK_PATH)
 
@@ -30,10 +33,11 @@ pytestmark = markers_for_notebook(NOTEBOOK_PATH)
     timeout=-1,
 )
 def test_output_tutorial_2(tb, tmp_path):
-    """Parameterized test case for tutorial 2: Uncertainty Propagation and Quantification.
+    """Parameterized test case for tutorial 2.
 
-    The notebook is run with injected lines of codes for testing
-    that the final results are as expected.
+    The tutorial is on Uncertainty Propagation and Quantification. The
+    notebook is run with injected lines of codes for testing that the
+    final results are as expected.
     """
     mu = np.array([0.006638095218949362, 0.0063343892089076466, 0.0021987605285805315]).tolist()
     x = np.array([0.203125, 0.5, 0.796875]).tolist()

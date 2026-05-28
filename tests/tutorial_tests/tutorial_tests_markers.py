@@ -20,23 +20,33 @@ from pathlib import Path
 
 import pytest
 
+from queens.utils.path import relative_path_from_root
+
 TUTORIAL_NOTEBOOKS_BY_MARKER = {
     "tutorial_tests": [
-        "tutorials/1_grid_iterator_rosenbrock.ipynb",
-        "tutorials/2_uncertainty_propagation_and_quantification.ipynb",
+        relative_path_from_root("tutorials/1_grid_iterator_rosenbrock.ipynb").as_posix(),
+        relative_path_from_root(
+            "tutorials/2_uncertainty_propagation_and_quantification.ipynb"
+        ).as_posix(),
     ],
     "tutorial_tests_fourc": [
-        "tutorials/3_orchestrating_4c_simulations/3_orchestrating_4c_simulations.ipynb",
-        "tutorials/4_quantifying_uncertainty_due_to_heterogeneous_material_fields/"
-        "4_quantifying_uncertainty_due_to_heterogeneous_material_fields.ipynb",
+        relative_path_from_root(
+            "tutorials/3_orchestrating_4c_simulations/3_orchestrating_4c_simulations.ipynb"
+        ).as_posix(),
+        relative_path_from_root(
+            "tutorials/4_quantifying_uncertainty_due_to_heterogeneous_material_fields/"
+            "4_quantifying_uncertainty_due_to_heterogeneous_material_fields.ipynb"
+        ).as_posix(),
     ],
     "tutorial_tests_remote": [
-        "tutorials/5_grid_iterator_4c_remote/5_grid_iterator_4c_remote.ipynb"
+        relative_path_from_root(
+            "tutorials/5_grid_iterator_4c_remote/5_grid_iterator_4c_remote.ipynb"
+        ).as_posix(),
     ],
 }
 
 ALL_TUTORIAL_NOTEBOOKS = tuple(
-    sorted(path.as_posix() for path in Path("tutorials").rglob("*.ipynb"))
+    sorted(path.as_posix() for path in relative_path_from_root(Path("tutorials")).rglob("*.ipynb"))
 )
 
 
