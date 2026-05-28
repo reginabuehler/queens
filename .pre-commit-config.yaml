@@ -71,13 +71,9 @@ repos:
         name: yamllint
         entry: yamllint
         args:
-          - > # This is needed to lint the jinja templates
-            -d={extends: default, rules: {braces: {max-spaces-inside: 1}
-            , brackets: disable, document-start: disable, "line-length": {"max": 100}}}
           - -f=colored
         language: python
         types: ["yaml"]
-        exclude: '^composed\.conda-lock\.yml$'
       - id: pylint
         name: pylint
         entry: pylint
