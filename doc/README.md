@@ -1,6 +1,7 @@
 # :book: HTML documentation
 
-We use [Sphinx](https://www.sphinx-doc.org/en/master/#) to generate the [QUEENS documentation](https://queens-py.github.io/queens). It automatically builds the html documentation from the docstrings.
+We use [Sphinx](https://www.sphinx-doc.org/en/master/#) to generate the [QUEENS documentation](https://queens-py.github.io/queens).
+It automatically builds the html documentation from the docstrings.
 
 We believe that documentation is essential and therefore welcome any improvements :blush:
 
@@ -9,13 +10,15 @@ We believe that documentation is essential and therefore welcome any improvement
 To build the documentation, first set up the QUEENS development environment as described in the
 [README](../README.md).
 
-Next, register the environment as a Jupyter kernel with:
+Next, register the environment as a Jupyter kernel such that the tutorial notbooks can be run while
+building the documentation:
 
 ```bash
 pixi run -e dev python -m ipykernel install --user --name queens --display-name "Python (queens)"
 ```
 
-When building the documentation on your machine for the first time or after adding new modules or classes to QUEENS, one needs to first rebuild the `autodoc index` by running:
+When building the documentation on your machine for the first time or after adding new modules or
+classes to QUEENS, one needs to first rebuild the `autodoc index` by running:
 
 ```bash
 cd <queens-root-directory>
