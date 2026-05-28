@@ -192,6 +192,7 @@ charon-build_4C:
     - .check_pixi_available
   stage: tests
   script:
+    - pixi run --frozen -e "$PIXI_ENVIRONMENT" install-editable
     - pixi run --locked -e "$PIXI_ENVIRONMENT" pytest tests/integration_tests/cluster/
       -v -m $CLUSTER_MARKER --no-cov -o log_cli=true --log-cli-level=DEBUG
       --remote-user=queens
