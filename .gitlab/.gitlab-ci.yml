@@ -64,9 +64,9 @@ workflow:
     - .check_pixi_available
   stage: build
   script:
-    - pixi install --frozen -e "$PIXI_ENVIRONMENT"
-    - pixi run --frozen -e "$PIXI_ENVIRONMENT" install-editable
-    - pixi list --frozen -e "$PIXI_ENVIRONMENT" > pipeline_pixi_environment.txt
+    - pixi install --locked -e "$PIXI_ENVIRONMENT"
+    - pixi run --locked -e "$PIXI_ENVIRONMENT" install-editable
+    - pixi list --locked -e "$PIXI_ENVIRONMENT" > pipeline_pixi_environment.txt
   artifacts:
     name: "pixi_env-$CI_PIPELINE_ID.txt"
     paths:
@@ -102,8 +102,8 @@ imcs-build_pixi_env:
         fi
         pixi --version
       '"
-    - pixi run --frozen -e "$PIXI_ENVIRONMENT" install-editable
-    - pixi run --frozen -e "$PIXI_ENVIRONMENT" python src/queens/utils/remote_build.py
+    - pixi run --locked -e "$PIXI_ENVIRONMENT" install-editable
+    - pixi run --locked -e "$PIXI_ENVIRONMENT" python src/queens/utils/remote_build.py
       --host=$REMOTE_ADDRESS --user=queens
       --remote-queens-repository=$REMOTE_BUILD_DIR
       --pixi-environment=$PIXI_ENVIRONMENT
@@ -192,7 +192,7 @@ charon-build_4C:
     - .check_pixi_available
   stage: tests
   script:
-    - pixi run --frozen -e "$PIXI_ENVIRONMENT" install-editable
+    - pixi run --locked -e "$PIXI_ENVIRONMENT" install-editable
     - pixi run --locked -e "$PIXI_ENVIRONMENT" pytest tests/integration_tests/cluster/
       -v -m $CLUSTER_MARKER --no-cov -o log_cli=true --log-cli-level=DEBUG
       --remote-user=queens
