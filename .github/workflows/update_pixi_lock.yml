@@ -1,4 +1,4 @@
-name: Update Pixi lockfile
+name: Update Pixi
 
 "on":
   workflow_dispatch:
@@ -10,14 +10,67 @@ permissions:
   pull-requests: write
 
 jobs:
-  update-pixi-lock:
-    name: Update Pixi lockfile
+  update-pixi:
+    name: Update Pixi
     runs-on: ubuntu-latest
     defaults:
       run:
         shell: bash
     steps:
       - uses: actions/checkout@v6
+      - name: Find latest Pixi release
+        id: pixi_release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          latest_version="$(
+            gh api \
+              -H "Accept: application/vnd.github+json" \
+              --paginate \
+              "/repos/prefix-dev/pixi/releases" |
+              jq -rs '
+                [
+                  .[][]
+                  | select(.draft | not)
+                  | select(.prerelease | not)
+                  | .tag_name as $tag
+                  | select($tag | test("^v[0-9]+\\.[0-9]+\\.[0-9]+$"))
+                  | ($tag | capture(
+                      "^v(?<major>[0-9]+)\\.(?<minor>[0-9]+)\\.(?<patch>[0-9]+)$"
+                    )) as $version
+                  | {
+                      tag: $tag,
+                      major: ($version.major | tonumber),
+                      minor: ($version.minor | tonumber),
+                      patch: ($version.patch | tonumber)
+                    }
+                ]
+                | sort_by(.major, .minor, .patch)
+                | last
+                | .tag
+              '
+          )"
+
+          if [ -z "${latest_version}" ] || [ "${latest_version}" = "null" ]; then
+            echo "No stable Pixi release tag matching vMAJOR.MINOR.PATCH found."
+            exit 1
+          fi
+
+          current_version="$(tr -d '[:space:]' < .pixi-version)"
+          echo "current_version=${current_version}" >> "$GITHUB_OUTPUT"
+          echo "latest_version=${latest_version}" >> "$GITHUB_OUTPUT"
+
+          if [ "${current_version}" = "${latest_version}" ]; then
+            echo "version_changed=false" >> "$GITHUB_OUTPUT"
+            echo "Pixi is already up to date: ${current_version}"
+          else
+            echo "version_changed=true" >> "$GITHUB_OUTPUT"
+            echo "Pixi update available: ${current_version} -> ${latest_version}"
+          fi
+      - name: Update Pixi version file
+        if: ${{ steps.pixi_release.outputs.version_changed == 'true' }}
+        run: |
+          printf '%s\n' "${{ steps.pixi_release.outputs.latest_version }}" > .pixi-version
       - name: Set up Pixi
         uses: ./.github/actions/setup-queens-pixi
         with:
@@ -27,15 +80,36 @@ jobs:
       - name: Update Pixi lockfile
         run: |
           pixi update --json | pixi exec pixi-diff-to-markdown > pixi_lock_update.md
+      - name: Write pull request body
+        env:
+          CURRENT_PIXI_VERSION: ${{ steps.pixi_release.outputs.current_version }}
+          LATEST_PIXI_VERSION: ${{ steps.pixi_release.outputs.latest_version }}
+          VERSION_CHANGED: ${{ steps.pixi_release.outputs.version_changed }}
+        run: |
+          {
+            if [ "${VERSION_CHANGED}" = "false" ]; then
+              echo "Pixi is already up to date at \`${CURRENT_PIXI_VERSION}\`."
+            else
+              echo "Update Pixi from \`${CURRENT_PIXI_VERSION}\` to" \
+                "\`${LATEST_PIXI_VERSION}\`."
+              echo ""
+              echo "Release: https://github.com/prefix-dev/pixi/releases/tag/${LATEST_PIXI_VERSION}"
+            fi
+
+            echo ""
+            cat pixi_lock_update.md
+          } > pixi_update.md
       - name: Create pull request
         uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: Update Pixi lockfile
-          title: Update Pixi lockfile
-          body-path: pixi_lock_update.md
-          branch: update-pixi-lock
+          commit-message: "build: update dependencies"
+          title: Update dependencies
+          body-path: pixi_update.md
+          branch: update-dependencies
           base: main
           labels: pixi
           delete-branch: true
-          add-paths: pixi.lock
+          add-paths: |
+            .pixi-version
+            pixi.lock
