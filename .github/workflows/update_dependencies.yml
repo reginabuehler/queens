@@ -1,4 +1,4 @@
-name: Update Pixi
+name: Update Dependencies
 
 "on":
   workflow_dispatch:
@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   update-pixi:
-    name: Update Pixi
+    name: Update Dependencies
     runs-on: ubuntu-latest
     defaults:
       run:
