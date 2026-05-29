@@ -20,11 +20,11 @@ inputs:
   environments:
     description: Whitespace-separated list of pixi environments to install.
     required: false
-    default: dev
+    default: default
   activate-environment:
     description: Pixi environment to activate and use for the editable install.
     required: false
-    default: dev
+    default: default
   install-editable:
     description: Whether to install QUEENS editable into the selected pixi environment.
     required: false
