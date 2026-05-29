@@ -300,7 +300,10 @@ thought-cluster-remove_build_dir:
   variables:
     REMOTE_ADDRESS: $LNM_REMOTE_ADDRESS
   needs:
+    - job: thought-build_pixi_env
     - job: lnm-cluster_tests
+      optional: true
+      artifacts: false
   tags:
     - lnm-build
   rules:
@@ -314,7 +317,10 @@ charon-cluster-remove_build_dir:
   variables:
     REMOTE_ADDRESS: $IMCS_REMOTE_ADDRESS
   needs:
+    - job: charon-build_pixi_env
     - job: imcs-cluster_tests
+      optional: true
+      artifacts: false
   tags:
     - imcs-build
   rules:
