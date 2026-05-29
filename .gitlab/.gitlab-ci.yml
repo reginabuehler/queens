@@ -11,6 +11,9 @@ variables:
   IMCS_TESTS:
     value: "1"
     description: "Run cluster tests at IMCS"
+  BUILD_4C:
+    value: "1"
+    description: "Build 4C in CI. Set to 0 to check for an existing remote 4C executable"
   REMOTE_BUILD_DIR:
     value: "/home/queens/builds/queens-$CI_PIPELINE_ID"
   LNM_REMOTE_PYTHON:
@@ -167,7 +170,7 @@ thought-build_4C:
   tags:
     - lnm-build
   rules:
-    - if: $LNM_TESTS == "1"
+    - if: '$LNM_TESTS == "1" && $BUILD_4C == "1"'
 
 charon-build_4C:
   extends:
@@ -182,7 +185,40 @@ charon-build_4C:
   tags:
     - imcs-build
   rules:
-    - if: $IMCS_TESTS == "1"
+    - if: '$IMCS_TESTS == "1" && $BUILD_4C == "1"'
+
+.check_4C:
+  stage: build
+  script:
+    - |
+      ssh "queens@$REMOTE_ADDRESS" \
+        "bash -lc 'if test -f ~/workspace/fourc_build/4C; then \
+          ls -l ~/workspace/fourc_build/4C; \
+        else \
+          echo Missing required 4C executable: ~/workspace/fourc_build/4C >&2; \
+          echo Set BUILD_4C to 1 to build it automatically. >&2; \
+          exit 1; \
+        fi'"
+
+thought-check_4C:
+  extends:
+    - .check_4C
+  variables:
+    REMOTE_ADDRESS: $LNM_REMOTE_ADDRESS
+  tags:
+    - lnm-build
+  rules:
+    - if: '$LNM_TESTS == "1" && $BUILD_4C == "0"'
+
+charon-check_4C:
+  extends:
+    - .check_4C
+  variables:
+    REMOTE_ADDRESS: $IMCS_REMOTE_ADDRESS
+  tags:
+    - imcs-build
+  rules:
+    - if: '$IMCS_TESTS == "1" && $BUILD_4C == "0"'
 
 #---------------------------------------------------------------------------------------------------
 # Cluster tests
@@ -217,9 +253,12 @@ lnm-cluster_tests:
     CLUSTER_MARKER: "lnm_cluster"
     REMOTE_PYTHON: $LNM_REMOTE_PYTHON
   needs:
-    - lnm-build_pixi_env
-    - thought-build_pixi_env
-    - thought-build_4C
+    - job: lnm-build_pixi_env
+    - job: thought-build_pixi_env
+    - job: thought-build_4C
+      optional: true
+    - job: thought-check_4C
+      optional: true
   tags:
     - lnm-ubuntu
   rules:
@@ -232,9 +271,12 @@ imcs-cluster_tests:
     CLUSTER_MARKER: "imcs_cluster"
     REMOTE_PYTHON: $IMCS_REMOTE_PYTHON
   needs:
-    - imcs-build_pixi_env
-    - charon-build_pixi_env
-    - charon-build_4C
+    - job: imcs-build_pixi_env
+    - job: charon-build_pixi_env
+    - job: charon-build_4C
+      optional: true
+    - job: charon-check_4C
+      optional: true
   tags:
     - imcs-ubuntu
   rules:
