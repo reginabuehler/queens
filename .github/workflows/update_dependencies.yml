@@ -74,6 +74,7 @@ jobs:
       - name: Set up Pixi
         uses: ./.github/actions/setup-queens-pixi
         with:
+          cache: false
           run-install: false
           install-editable: false
           ensure-rsync: false
