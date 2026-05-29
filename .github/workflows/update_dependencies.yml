@@ -75,6 +75,7 @@ jobs:
         uses: ./.github/actions/setup-queens-pixi
         with:
           cache: false
+          frozen: false
           run-install: false
           install-editable: false
           ensure-rsync: false

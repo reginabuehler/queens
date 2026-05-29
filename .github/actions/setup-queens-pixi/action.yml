@@ -33,6 +33,10 @@ inputs:
     description: Whether to verify that rsync is available, installing it if necessary.
     required: false
     default: "true"
+  frozen:
+    description: Whether to install with frozen requirements.
+    required: false
+    default: "true"
 
 runs:
   using: composite
@@ -51,7 +55,7 @@ runs:
         cache-write: ${{ inputs.cache-write }}
         run-install: ${{ inputs.run-install }}
         environments: ${{ inputs.environments }}
-        frozen: true
+        frozen: ${{ inputs.frozen }}
         activate-environment: ${{ inputs.activate-environment }}
 
     - name: Install QUEENS in workspace
