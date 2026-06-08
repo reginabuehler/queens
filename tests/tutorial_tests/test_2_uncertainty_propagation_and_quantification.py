@@ -17,7 +17,7 @@
 import numpy as np
 from testbook import testbook
 
-from queens.utils.path import relative_path_from_root
+from test_utils.path import relative_path_from_root
 from test_utils.tutorial_tests import inject_mock_base_dir, markers_for_notebook
 
 NOTEBOOK_PATH = relative_path_from_root(

@@ -35,9 +35,9 @@ from queens.parameters.parameters import Parameters
 from queens.schedulers.cluster import Cluster
 from queens.utils.config_directories import experiment_directory
 from queens.utils.io import load_result
-from queens.utils.path import relative_path_from_root
 from queens.utils.remote_operations import RemoteConnection
 from test_utils.integration_tests import fourc_build_path_from_home
+from test_utils.path import relative_path_from_root
 
 _logger = logging.getLogger(__name__)
 

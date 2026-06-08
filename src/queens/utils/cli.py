@@ -26,9 +26,9 @@ from queens.utils.injector import inject
 from queens.utils.io import print_pickled_data
 from queens.utils.logger_settings import reset_logging, setup_cli_logging
 from queens.utils.metadata import write_metadata_to_csv
-from queens.utils.path import PATH_TO_ROOT
 from queens.utils.printing import get_str_table
 from queens.utils.run_subprocess import run_subprocess
+from test_utils.path import PATH_TO_ROOT
 
 _logger = logging.getLogger(__name__)
 

@@ -24,9 +24,10 @@ from pathlib import Path
 from queens.schedulers._scheduler import CLEANUP_SCHEDULERS
 from queens.utils.ascii_art import print_banner_and_description
 from queens.utils.logger_settings import reset_logging, setup_basic_logging
-from queens.utils.path import PATH_TO_ROOT, create_folder_if_not_existent
+from queens.utils.path import create_folder_if_not_existent
 from queens.utils.printing import get_str_table
 from queens.utils.run_subprocess import run_subprocess
+from test_utils.path import PATH_TO_ROOT
 
 _logger = logging.getLogger(__name__)
 

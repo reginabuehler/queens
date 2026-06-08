@@ -24,7 +24,7 @@ from pathlib import Path
 import requests
 
 from queens.utils.injector import inject
-from queens.utils.path import relative_path_from_root
+from test_utils.path import relative_path_from_root
 
 sys.path.insert(1, str(relative_path_from_root("test_utils").resolve()))
 from get_queens_example_from_readme import (  # pylint: disable=import-error, wrong-import-position,wrong-import-order

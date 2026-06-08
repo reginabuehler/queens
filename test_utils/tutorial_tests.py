@@ -20,7 +20,7 @@ from pathlib import Path
 
 import pytest
 
-from queens.utils.path import relative_path_from_root
+from test_utils.path import relative_path_from_root
 
 
 def inject_notebook_execution_context(tb, notebook_dir):
