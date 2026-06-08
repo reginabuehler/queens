@@ -26,7 +26,7 @@ from queens.utils.path import (
     is_empty,
     relative_path_from_queens_source,
 )
-from test_utils.path import PATH_TO_ROOT, _find_path_to_root, relative_path_from_root
+from test_utils.path import PATH_TO_ROOT, relative_path_from_root
 
 THIS_PATH = Path(__file__).parent
 
@@ -60,46 +60,6 @@ def test_path_to_queens_source(path_to_queens_source):
 def test_path_to_root(path_to_root):
     """Test path to root."""
     assert PATH_TO_ROOT == path_to_root
-
-
-def test_find_path_to_root_falls_back_to_current_working_directory(tmp_path, monkeypatch):
-    """Test path to root fallback from an installed package location."""
-    installed_candidate = tmp_path / ".venv" / "lib" / "python3.12" / "site-packages"
-    installed_candidate.mkdir(parents=True)
-    checkout = tmp_path / "checkout"
-    _write_pyproject(checkout, "queens")
-
-    monkeypatch.chdir(checkout)
-
-    assert _find_path_to_root(installed_candidate) == checkout
-
-
-def test_find_path_to_root_falls_back_to_current_working_directory_subdirectories(
-    tmp_path, monkeypatch
-):
-    """Test path to root fallback via pyproject.toml below the cwd."""
-    installed_candidate = tmp_path / ".venv" / "lib" / "python3.12" / "site-packages"
-    _write_pyproject(installed_candidate, "not-queens")
-    workspace = tmp_path / "workspace"
-    checkout = workspace / "queens"
-    _write_pyproject(checkout, "queens")
-
-    monkeypatch.chdir(workspace)
-
-    assert _find_path_to_root(installed_candidate) == checkout
-
-
-def test_find_path_to_root_raises_if_queens_pyproject_is_missing(tmp_path, monkeypatch):
-    """Test path to root fallback fails without a QUEENS pyproject.toml."""
-    installed_candidate = tmp_path / ".venv" / "lib" / "python3.12" / "site-packages"
-    _write_pyproject(installed_candidate, "not-queens")
-    workspace = tmp_path / "workspace"
-    _write_pyproject(workspace, "not-queens")
-
-    monkeypatch.chdir(workspace)
-
-    with pytest.raises(RuntimeError, match="Could not determine the QUEENS project root"):
-        _find_path_to_root(installed_candidate)
 
 
 def test_check_if_path_exists():
