@@ -12,7 +12,13 @@
 # should have received a copy of the GNU Lesser General Public License along with QUEENS. If not,
 # see <https://www.gnu.org/licenses/>.
 #
-"""Path utilities for the QUEENS testsuite."""
+"""Path helpers for the QUEENS test suite.
+
+These helpers resolve paths in the repository checkout for tests and
+tutorials, including tests that build and install QUEENS from a wheel.
+Runtime QUEENS code must not import this module; runtime path helpers
+belong in ``queens.utils.path``.
+"""
 
 from pathlib import Path
 

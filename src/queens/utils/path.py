@@ -21,6 +21,10 @@ import queens
 
 PATH_TO_QUEENS_SOURCE = Path(queens.__file__).parent
 
+# this path to root is used during runtime and thus needs to be shipped with a build even though it
+# is not useful in that scenario.
+PATH_TO_ROOT = Path(__file__).parents[3]
+
 
 def relative_path_from_queens_source(relative_path: str) -> Path:
     """Create relative path from *src/queens/*.
