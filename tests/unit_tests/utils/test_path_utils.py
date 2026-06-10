@@ -21,13 +21,12 @@ import pytest
 import queens
 from queens.utils.path import (
     PATH_TO_QUEENS_SOURCE,
-    PATH_TO_ROOT,
     check_if_path_exists,
     create_folder_if_not_existent,
     is_empty,
     relative_path_from_queens_source,
 )
-from test_utils.path import relative_path_from_root
+from test_utils.path import PATH_TO_ROOT, relative_path_from_root
 
 THIS_PATH = Path(__file__).parent
 
