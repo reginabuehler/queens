@@ -216,8 +216,8 @@ def _validate_feature_groups(
 ) -> list[str]:
     """Validate dependency groups and optional dependencies against pixi.
 
-    For each dependency group and each optional-depedencies group a pixi
-    feature with identical requirements should exist.
+    For each dependency group and each optional-dependencies group a
+    pixi feature with identical requirements should exist.
     """
     error_messages: list[str] = []
     pep_names: list[str] = []
