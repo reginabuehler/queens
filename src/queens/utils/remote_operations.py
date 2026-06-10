@@ -18,6 +18,7 @@ import atexit
 import json
 import logging
 import pickle
+import shlex
 import socket
 import time
 import uuid
@@ -357,13 +358,16 @@ class RemoteConnection(Connection):
 
         _logger.info("Build remote QUEENS environment...")
         start_time = time.time()
-        command_string = (
-            'bash -lc \'export PATH="$HOME/.pixi/bin:$PATH";'
-            f" cd {self.remote_queens_repository}; "
+        remote_queens_repository = shlex.quote(str(self.remote_queens_repository))
+        pixi_environment = shlex.quote(pixi_environment)
+        bash_command = (
+            'export PATH="$HOME/.pixi/bin:$PATH";'
+            f" cd {remote_queens_repository}; "
             f"rm -rf .pixi/envs/{pixi_environment}; "
             f"pixi install --locked --environment {pixi_environment}; "
-            f"pixi run --locked --environment {pixi_environment} install-editable;'"
+            f"pixi run --locked --environment {pixi_environment} install-editable;"
         )
+        command_string = f"bash -lc {shlex.quote(bash_command)}"
         result = self.run(command_string, echo=True, in_stream=False)
 
         _logger.debug(result.stdout)
