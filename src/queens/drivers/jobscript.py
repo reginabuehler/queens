@@ -15,6 +15,7 @@
 """Driver to run a jobscript."""
 
 import logging
+from collections import deque
 from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
@@ -31,6 +32,8 @@ from queens.utils.path import create_folder_if_not_existent
 from queens.utils.run_subprocess import run_subprocess
 
 _logger = logging.getLogger(__name__)
+
+JOBSCRIPT_LOG_TAIL_LINES = 25
 
 
 @dataclass
@@ -71,6 +74,27 @@ class JobOptions:
             dict: Dict combining the job options and the additional data.
         """
         return self.to_dict() | additional_data
+
+
+def read_log_file_tail(log_file: Path, number_of_lines: int) -> tuple[str, bool]:
+    """Read the last lines of a log file.
+
+    Args:
+        log_file: Path to the log file.
+        number_of_lines: Maximum number of lines to read.
+
+    Returns:
+        The requested log file tail and whether the log file was truncated.
+    """
+    lines = deque(maxlen=number_of_lines + 1)
+    with open(log_file, "r", encoding="utf-8") as file:
+        lines.extend(file)
+
+    is_truncated = len(lines) > number_of_lines
+    if is_truncated:
+        lines.popleft()
+
+    return "".join(lines), is_truncated
 
 
 class Jobscript(Driver):
@@ -301,7 +325,14 @@ class Jobscript(Driver):
         )
         if self.raise_error_on_jobscript_failure and process_returncode:
             if log_file.is_file():
-                stdout += f"\n\nContents of {log_file}:\n{read_file(log_file)}"
+                log_tail, is_truncated = read_log_file_tail(log_file, JOBSCRIPT_LOG_TAIL_LINES)
+                stdout += f"\n\nContents of {log_file}:\n"
+                if is_truncated:
+                    stdout += (
+                        f"Log file output truncated to the last "
+                        f"{JOBSCRIPT_LOG_TAIL_LINES} lines.\n"
+                    )
+                stdout += log_tail
             raise SubprocessError.construct_error_from_command(
                 command=execute_cmd,
                 command_output=stdout,
