@@ -40,6 +40,12 @@ def test_hamiltonian_monte_carlo_gaussian(
 ):
     """Test HMC sampling for a Gaussian-Gaussian Bayesian inference problem.
 
+    Note: the default test setup is only for a sanity check.
+    It only uses a very small number of samples, which is why the chain doesn't converge towards
+    the analytical solution.
+
+    However, there is an analytical setup with an analytical solution that underlies the test, which
+    should be reached in case of convergence:
     The test samples from a two-dimensional posterior with Gaussian prior and Gaussian
     likelihood. Since both prior and likelihood are Gaussian, the posterior is Gaussian
     again. The prior is
