@@ -51,7 +51,7 @@ QUEENS (**Q**uantification of **U**ncertain **E**ffects in **En**gineering **S**
 ## :rocket: Getting started
 
 <!---prerequisites marker, do not remove this comment-->
->**Prerequisites**: Python 3.12 or newer. For development, use [Pixi](https://pixi.sh/latest/).
+>**Prerequisites**: A Unix system with Python 3.12 or newer. For development, use [Pixi](https://pixi.sh/latest/).
 <!---prerequisites marker, do not remove this comment-->
 ### Easy installation
 <!---installation marker, do not remove this comment-->
