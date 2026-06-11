@@ -54,11 +54,59 @@ workflow:
   before_script:
     - |
       export PIXI_VERSION="$(tr -d '[:space:]' < .pixi-version)"
-      export PATH="$HOME/.pixi/bin:$PATH"
-      if ! command -v pixi >/dev/null 2>&1; then
-        curl -fsSL https://pixi.sh/install.sh | PIXI_VERSION="$PIXI_VERSION" PIXI_HOME="$HOME/.pixi" bash
+      export PIXI_HOME="$HOME/.pixi"
+      export PATH="$PIXI_HOME/bin:$PATH"
+
+      pixi_version_matches() {
+        hash -r 2>/dev/null || true
+        if ! command -v pixi >/dev/null 2>&1; then
+          return 1
+        fi
+        installed_pixi_version="$(pixi --version 2>/dev/null | awk '{print $2}')"
+        [ "${installed_pixi_version#v}" = "${PIXI_VERSION#v}" ]
+      }
+
+      install_or_update_pixi() {
+        if command -v pixi >/dev/null 2>&1; then
+          echo "Updating pixi to $PIXI_VERSION..."
+          if pixi self-update --version "${PIXI_VERSION#v}" --force --no-release-note; then
+            hash -r 2>/dev/null || true
+            return
+          fi
+          echo "pixi self-update failed; installing pixi $PIXI_VERSION into $PIXI_HOME..."
+        else
+          echo "Installing pixi $PIXI_VERSION into $PIXI_HOME..."
+        fi
+        curl -fsSL https://pixi.sh/install.sh | PIXI_VERSION="$PIXI_VERSION" PIXI_HOME="$PIXI_HOME" bash
+        hash -r 2>/dev/null || true
+      }
+
+      if ! pixi_version_matches; then
+        mkdir -p "$PIXI_HOME"
+        PIXI_INSTALL_LOCK="$PIXI_HOME/.install.lock"
+        pixi_install_lock_acquired=0
+        while [ "$pixi_install_lock_acquired" -eq 0 ] && ! pixi_version_matches; do
+          if mkdir "$PIXI_INSTALL_LOCK" 2>/dev/null; then
+            pixi_install_lock_acquired=1
+          else
+            echo "Waiting for another pixi installation or update to finish..."
+            sleep 5
+          fi
+        done
+        if [ "$pixi_install_lock_acquired" -eq 1 ]; then
+          trap 'rmdir "$PIXI_INSTALL_LOCK"' EXIT
+          if ! pixi_version_matches; then
+            install_or_update_pixi
+          fi
+          rmdir "$PIXI_INSTALL_LOCK"
+          trap - EXIT
+        fi
       fi
       pixi --version
+      if ! pixi_version_matches; then
+        echo "Installed pixi version does not match pinned version $PIXI_VERSION." >&2
+        exit 1
+      fi
 #---------------------------------------------------------------------------------------------------
 # Jobs of stage: build
 #---------------------------------------------------------------------------------------------------
@@ -94,17 +142,68 @@ imcs-build_pixi_env:
     - if: $IMCS_TESTS == "1"
 #----------------------------------------------------------------------------------------------
 .build_pixi_env_cluster:
+  extends:
+    - .check_pixi_available
   stage: build
   script:
     - export PIXI_VERSION="$(tr -d '[:space:]' < .pixi-version)"
     - |
-      ssh queens@$REMOTE_ADDRESS "bash -lc '
-        export PATH=\"\$HOME/.pixi/bin:\$PATH\"
+      ssh "queens@$REMOTE_ADDRESS" "bash -s -- '$PIXI_VERSION'" <<'REMOTE_PIXI_INSTALL'
+      PIXI_VERSION="$1"
+      export PIXI_HOME="$HOME/.pixi"
+      export PATH="$PIXI_HOME/bin:$PATH"
+
+      pixi_version_matches() {
+        hash -r 2>/dev/null || true
         if ! command -v pixi >/dev/null 2>&1; then
-          curl -fsSL https://pixi.sh/install.sh | PIXI_VERSION=\"$PIXI_VERSION\" PIXI_HOME=\"\$HOME/.pixi\" bash
+          return 1
         fi
-        pixi --version
-      '"
+        installed_pixi_version="$(pixi --version 2>/dev/null | awk '{print $2}')"
+        [ "${installed_pixi_version#v}" = "${PIXI_VERSION#v}" ]
+      }
+
+      install_or_update_pixi() {
+        if command -v pixi >/dev/null 2>&1; then
+          echo "Updating remote pixi to $PIXI_VERSION..."
+          if pixi self-update --version "${PIXI_VERSION#v}" --force --no-release-note; then
+            hash -r 2>/dev/null || true
+            return
+          fi
+          echo "Remote pixi self-update failed; installing pixi $PIXI_VERSION into $PIXI_HOME..."
+        else
+          echo "Installing remote pixi $PIXI_VERSION into $PIXI_HOME..."
+        fi
+        curl -fsSL https://pixi.sh/install.sh | PIXI_VERSION="$PIXI_VERSION" PIXI_HOME="$PIXI_HOME" bash
+        hash -r 2>/dev/null || true
+      }
+
+      if ! pixi_version_matches; then
+        mkdir -p "$PIXI_HOME"
+        PIXI_INSTALL_LOCK="$PIXI_HOME/.install.lock"
+        pixi_install_lock_acquired=0
+        while [ "$pixi_install_lock_acquired" -eq 0 ] && ! pixi_version_matches; do
+          if mkdir "$PIXI_INSTALL_LOCK" 2>/dev/null; then
+            pixi_install_lock_acquired=1
+          else
+            echo "Waiting for another remote pixi installation or update to finish..."
+            sleep 5
+          fi
+        done
+        if [ "$pixi_install_lock_acquired" -eq 1 ]; then
+          trap 'rmdir "$PIXI_INSTALL_LOCK"' EXIT
+          if ! pixi_version_matches; then
+            install_or_update_pixi
+          fi
+          rmdir "$PIXI_INSTALL_LOCK"
+          trap - EXIT
+        fi
+      fi
+      pixi --version
+      if ! pixi_version_matches; then
+        echo "Installed remote pixi version does not match pinned version $PIXI_VERSION." >&2
+        exit 1
+      fi
+      REMOTE_PIXI_INSTALL
     - pixi run --locked -e "$PIXI_ENVIRONMENT" install-editable
     - pixi run --locked -e "$PIXI_ENVIRONMENT" python src/queens/utils/remote_build.py
       --host=$REMOTE_ADDRESS --user=queens
