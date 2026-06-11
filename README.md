@@ -22,6 +22,7 @@
 
 [![tests-local-main](https://github.com/queens-py/queens/actions/workflows/local_testsuite.yml/badge.svg?branch=main)](https://github.com/queens-py/queens/actions/workflows/local_testsuite.yml?query=branch:main)
 [![build-documentation-main](https://github.com/queens-py/queens/actions/workflows/build_documentation.yml/badge.svg?branch=main)](https://github.com/queens-py/queens/actions/workflows/build_documentation.yml?query=branch:main)
+[![code-quality-main](https://github.com/queens-py/queens/actions/workflows/code_quality.yml/badge.svg?branch=main)](https://github.com/queens-py/queens/actions/workflows/code_quality.yml?query=branch:main)
 
 </div>
 
