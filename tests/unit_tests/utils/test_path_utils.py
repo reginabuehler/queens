@@ -31,15 +31,6 @@ from test_utils.path import PATH_TO_ROOT, relative_path_from_root
 THIS_PATH = Path(__file__).parent
 
 
-def _write_pyproject(path, project_name):
-    """Write a minimal pyproject.toml with the given project name."""
-    path.mkdir(parents=True, exist_ok=True)
-    (path / "pyproject.toml").write_text(
-        f'[project]\nname = "{project_name}"\n',
-        encoding="utf-8",
-    )
-
-
 @pytest.fixture(name="path_to_root")
 def fixture_path_to_root():
     """Path to root."""
