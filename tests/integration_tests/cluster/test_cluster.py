@@ -35,9 +35,9 @@ from queens.parameters.parameters import Parameters
 from queens.schedulers.cluster import Cluster
 from queens.utils.config_directories import experiment_directory
 from queens.utils.io import load_result
-from queens.utils.path import relative_path_from_root
 from queens.utils.remote_operations import RemoteConnection
 from test_utils.integration_tests import fourc_build_path_from_home
+from test_utils.path import relative_path_from_root
 
 _logger = logging.getLogger(__name__)
 
@@ -259,7 +259,9 @@ class TestCluster:
 
     @staticmethod
     @testbook(
-        "tutorials/5_grid_iterator_4c_remote/5_grid_iterator_4c_remote.ipynb",
+        relative_path_from_root(
+            "tutorials/5_grid_iterator_4c_remote/5_grid_iterator_4c_remote.ipynb"
+        ),
     )
     def test_4c_remote_tutorial(
         tb,
@@ -271,8 +273,9 @@ class TestCluster:
     ):
         """Test for tutorial 3: Remote 4C simulation with grid iterator.
 
-        The notebook is run with injected lines of code to replace placeholders.
-        It is checked that the replaced dict entries already exist in the notebook.
+        The notebook is run with injected lines of code to replace
+        placeholders. It is checked that the replaced dict entries
+        already exist in the notebook.
         """
         kwargs_dicts = [basic_jobscript_kwargs, remote_connection_kwargs, minimal_cluster_kwargs]
         dict_names = [
