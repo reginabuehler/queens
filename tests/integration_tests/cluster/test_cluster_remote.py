@@ -12,7 +12,7 @@
 # should have received a copy of the GNU Lesser General Public License along with QUEENS. If not,
 # see <https://www.gnu.org/licenses/>.
 #
-"""Test remote 4C simulations with ensight data-processor."""
+"""Integration tests for the ClusterRemote scheduler."""
 
 import json
 import logging
